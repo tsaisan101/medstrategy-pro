@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedStrategy Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+:root{
+  --navy:#0D1B2A;--steel:#1C3A52;--teal:#0E7C7B;--teal-lt:#12A09F;
+  --ice:#E8F4F4;--mist:#F0F5F8;--white:#fff;--danger:#C0392B;
+  --gold:#D4A843;--border:#D0DDE5;--text:#1A2B35;--sub:#5A7180;
+  --green:#1E8449;--orange:#D35400;--purple:#7D3C98;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--mist);color:var(--text);min-height:100vh;font-size:13px;}
+
+/* HEADER */
+header{background:var(--navy);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:2px solid var(--teal);position:sticky;top:0;z-index:200;}
+.logo{font-size:15px;font-weight:700;color:#fff;letter-spacing:.03em;}
+.logo span{color:var(--teal-lt);}
+.hbadge{font-family:'DM Mono',monospace;font-size:9px;color:var(--teal-lt);border:1px solid var(--teal);border-radius:20px;padding:2px 9px;letter-spacing:.07em;}
+
+/* MODULE TABS */
+.mod-tabs{display:flex;background:var(--navy);border-bottom:1px solid var(--steel);padding:0 20px;}
+.mod-tab{padding:10px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,.45);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
+.mod-tab:hover{color:rgba(255,255,255,.75);}
+.mod-tab.active{color:#fff;border-bottom-color:var(--teal-lt);font-weight:600;}
+.mod-tab .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;}
+.d-ch{background:var(--teal);}
+.d-oem{background:var(--gold);}
+.d-comp{background:var(--purple);}
+.d-strat{background:var(--green);}
+.d-sa{background:var(--danger);}
+
+/* SALES ASSISTANT */
+.sa-layout{display:flex;height:100%;gap:0;}
+.sa-left{width:280px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sa-right{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.sa-email-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--mist);font-size:11px;}
+.sa-email-row .sa-name{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sa-email-row .sa-addr{color:var(--sub);font-size:10px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sa-email-row .sa-src{font-size:9px;font-weight:700;letter-spacing:.05em;padding:1px 6px;border-radius:8px;flex-shrink:0;}
+.src-ch{background:var(--ice);color:var(--teal);}
+.src-oem{background:#fef5e7;color:#b7760a;}
+.src-comp{background:#f3e8ff;color:var(--purple);}
+.src-strat{background:#e9f7ef;color:var(--green);}
+.sa-compose{background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden;}
+.sa-compose-h{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sa-compose-h span{font-size:13px;font-weight:700;}
+.sa-field{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
+.sa-field label{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;width:50px;flex-shrink:0;padding-top:7px;}
+.sa-field-val{flex:1;}
+.sa-to-tags{display:flex;flex-wrap:wrap;gap:5px;padding:5px 0;}
+.sa-to-tag{background:var(--ice);color:var(--teal);border:1px solid #b0d8d8;border-radius:4px;padding:2px 7px;font-size:11px;display:flex;align-items:center;gap:4px;}
+.sa-to-tag button{border:none;background:none;color:var(--sub);cursor:pointer;font-size:12px;line-height:1;padding:0;}
+.sa-body-wrap{padding:12px 18px;}
+.sa-body-wrap textarea{width:100%;min-height:180px;resize:vertical;padding:10px;border:1px solid var(--border);border-radius:7px;font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:var(--text);background:var(--mist);}
+.sa-body-wrap textarea:focus{border-color:var(--teal);background:#fff;outline:none;}
+.sa-actions{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;}
+.sa-empty{padding:40px 20px;text-align:center;color:var(--sub);font-size:12px;line-height:1.8;}
+.sa-counter{font-size:10px;font-weight:700;color:var(--sub);padding:10px 14px;border-bottom:1px solid var(--border);letter-spacing:.05em;text-transform:uppercase;}
+
+/* MODULE PANELS */
+.mod-panel{display:none;height:calc(100vh - 99px);}
+.mod-panel.active{display:flex;}
+
+/* ── SHARED LAYOUT ── */
+.pane-left{width:290px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.pane-right{flex:1;overflow-y:auto;padding:20px;}
+
+/* FORM ELEMENTS */
+.fblock{padding:12px 14px;border-bottom:1px solid var(--border);}
+.flabel{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.07em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.sel-cnt{font-size:10px;font-weight:600;color:var(--teal);background:var(--ice);border-radius:10px;padding:1px 7px;}
+.ms-box{max-height:110px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;background:var(--mist);}
+.ms-box::-webkit-scrollbar{width:3px;}.ms-box::-webkit-scrollbar-thumb{background:var(--border);}
+.ms-grp{font-size:9px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px 2px;background:#e8eef2;}
+.ms-item{display:flex;align-items:center;gap:6px;padding:4px 8px;cursor:pointer;transition:background .1s;}
+.ms-item:hover{background:var(--ice);}
+.ms-item input{accent-color:var(--teal);width:12px;height:12px;cursor:pointer;flex-shrink:0;}
+.ms-item span{font-size:11px;line-height:1.3;}
+select,input[type=text],textarea{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;color:var(--text);background:var(--mist);outline:none;}
+select:focus,input[type=text]:focus,textarea:focus{border-color:var(--teal);background:#fff;}
+
+/* BUTTONS */
+.btn{padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-full{width:100%;}
+.btn-teal{background:var(--teal);color:#fff;}.btn-teal:hover{background:var(--teal-lt);}
+.btn-gold{background:var(--gold);color:#fff;}.btn-gold:hover{background:#e6b84a;}
+.btn-purple{background:var(--purple);color:#fff;}.btn-purple:hover{background:#9b4dba;}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:#239b56;}
+.btn-ghost{background:var(--mist);color:var(--text);border:1px solid var(--border);}.btn-ghost:hover{background:#e2ebf0;}
+.btn-danger{background:#fdecea;color:var(--danger);border:1px solid #f5c2bd;}.btn-danger:hover{background:#fbdad7;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* PROSPECT LIST */
+.plist{flex:1;overflow-y:auto;}
+.pitem{padding:10px 14px;border-bottom:1px solid #eef2f5;cursor:pointer;position:relative;transition:background .1s;}
+.pitem:hover{background:var(--ice);}
+.pitem.active{background:#e0f0f0;border-left:3px solid var(--teal);}
+.pi-dot{position:absolute;right:10px;top:11px;width:7px;height:7px;border-radius:50%;}
+.s-new{background:var(--gold);}.s-active{background:var(--green);}.s-cold{background:#95a5a6;}
+.pi-name{font-size:12px;font-weight:600;padding-right:18px;line-height:1.3;}
+.pi-meta{font-size:10px;color:var(--sub);margin-top:2px;display:flex;gap:5px;flex-wrap:wrap;}
+.pi-tag{background:var(--ice);color:var(--teal);border:1px solid #b0d8d8;border-radius:3px;padding:1px 5px;font-size:10px;}
+.empty-list{padding:32px 14px;text-align:center;color:var(--sub);font-size:12px;}
+
+/* CARDS */
+.card{background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.card-h{padding:14px 18px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;}
+.card-title{font-size:15px;font-weight:700;}
+.card-sub{font-size:11px;color:var(--sub);margin-top:2px;}
+.card-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.card-body{padding:14px 18px;}
+.tabs{display:flex;border-bottom:2px solid var(--border);padding:0 18px;}
+.tab{padding:8px 12px;font-size:11px;font-weight:500;color:var(--sub);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:600;}
+.tp{display:none;padding:14px 18px;}.tp.active{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.full{grid-column:1/-1;}
+.fl label{font-size:9px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px;}
+.fl p,.fl a{font-size:12px;}.fl a{color:var(--teal);text-decoration:none;}.fl a:hover{text-decoration:underline;}
+
+/* WELCOME CARD */
+.welcome{background:linear-gradient(135deg,var(--navy) 0%,var(--steel) 100%);border-radius:10px;padding:20px 22px;color:#fff;margin-bottom:14px;}
+.welcome h2{font-size:17px;font-weight:700;margin-bottom:4px;}
+.welcome p{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;}
+.wstats{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;}
+.wsv{font-size:18px;font-weight:700;color:var(--teal-lt);}
+.wsl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.04em;}
+
+/* TABLE */
+.tcard{background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden;}
+.tcard-h{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.tcard-title{font-size:12px;font-weight:600;}
+input.tsearch{width:180px;padding:5px 9px;border:1px solid var(--border);border-radius:6px;font-size:11px;}
+table{width:100%;border-collapse:collapse;}
+th{padding:7px 11px;text-align:left;font-size:9px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;background:var(--mist);border-bottom:1px solid var(--border);}
+td{padding:8px 11px;font-size:11px;border-bottom:1px solid #f0f4f7;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8fbfc;cursor:pointer;}
+.badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;display:inline-block;}
+.b-new{background:#fef5e7;color:#b7760a;}.b-active{background:#e9f7ef;color:var(--green);}.b-cold{background:#f2f3f4;color:#717d7e;}
+
+/* COMPETITOR CARDS */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.comp-card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:8px;}
+.comp-name{font-size:14px;font-weight:700;}
+.comp-origin{font-size:11px;color:var(--sub);}
+.comp-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-right:4px;margin-bottom:4px;}
+.tag-strength{background:#e9f7ef;color:var(--green);}
+.tag-weakness{background:#fdecea;color:var(--danger);}
+.tag-price{background:#fef5e7;color:#b7760a;}
+.comp-row{font-size:11px;color:var(--sub);display:flex;gap:6px;}
+.comp-row strong{color:var(--text);min-width:70px;flex-shrink:0;}
+.divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
+
+/* STRATEGY PANEL */
+.strat-section{background:#fff;border-radius:10px;border:1px solid var(--border);padding:18px;margin-bottom:14px;}
+.strat-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.strat-icon{font-size:16px;}
+.strat-body{font-size:12px;color:var(--sub);line-height:1.7;}
+.strat-body strong{color:var(--text);}
+.strat-table{width:100%;border-collapse:collapse;font-size:11px;}
+.strat-table th{background:var(--mist);padding:6px 10px;text-align:left;font-weight:600;color:var(--sub);border:1px solid var(--border);}
+.strat-table td{padding:6px 10px;border:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.pill{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.pill-green{background:#e9f7ef;color:var(--green);}
+.pill-orange{background:#fef5e7;color:var(--orange);}
+.pill-red{background:#fdecea;color:var(--danger);}
+.pill-blue{background:#e8f4f4;color:var(--teal);}
+
+/* STATUS / NOTE */
+.sstat{padding:5px 8px;border-radius:5px;border:1px solid var(--border);font-size:12px;font-family:'Inter',sans-serif;background:var(--mist);color:var(--text);cursor:pointer;}
+.actitem{padding:6px 9px;background:var(--mist);border-radius:5px;border-left:3px solid var(--teal);margin-bottom:6px;}
+.adt{font-size:10px;color:var(--sub);}.atx{font-size:11px;margin-top:2px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--navy);color:#fff;padding:9px 14px;border-radius:7px;font-size:12px;font-weight:500;border-left:3px solid var(--teal);transform:translateY(60px);opacity:0;transition:all .3s;z-index:999;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Med<span>Strategy</span> Pro</div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="hbadge">5-MODULE PLATFORM</span>
+    <span style="font-size:11px;color:var(--sub);" id="hcount">Ready</span>
+  </div>
+</header>
+
+<!-- MODULE TABS -->
+<div class="mod-tabs">
+  <button class="mod-tab active" onclick="showMod('ch',this)"><span class="dot d-ch"></span>通路商 Channel Prospects</button>
+  <button class="mod-tab" onclick="showMod('oem',this)"><span class="dot d-oem"></span>品牌代工 OEM Prospects</button>
+  <button class="mod-tab" onclick="showMod('comp',this)"><span class="dot d-comp"></span>競品分析 Competitor Intel</button>
+  <button class="mod-tab" onclick="showMod('strat',this)"><span class="dot d-strat"></span>代工策略 OEM Strategy</button>
+  <button class="mod-tab" id="sa-tab" onclick="showMod('sa',this)"><span class="dot d-sa"></span>Sales Assistant <span id="sa-badge" style="display:none;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:9px;margin-left:4px;">0</span></button>
+</div>
+
+<!-- ══ MODULE 1: CHANNEL PROSPECTS ══════════════════════════════════════════ -->
+<div class="mod-panel active" id="mod-ch">
+  <div class="pane-left">
+    <div class="fblock">
+      <div class="flabel">Product <span id="ch-cat-cnt" class="sel-cnt">0</span></div>
+      <div class="ms-box" id="ch-cat">
+        <div class="ms-grp">Consumer Health</div>
+        <label class="ms-item"><input type="checkbox" value="thermo-elec"><span>電子體溫計</span></label>
+        <label class="ms-item"><input type="checkbox" value="thermo-ir"><span>紅外線體溫計</span></label>
+        <label class="ms-item"><input type="checkbox" value="bp-monitor"><span>血壓計</span></label>
+        <label class="ms-item"><input type="checkbox" value="glucometer"><span>血糖機</span></label>
+        <label class="ms-item"><input type="checkbox" value="nasal-asp"><span>吸鼻機</span></label>
+        <label class="ms-item"><input type="checkbox" value="nasal-wash"><span>洗鼻機</span></label>
+        <label class="ms-item"><input type="checkbox" value="breast-pump"><span>哺乳泵</span></label>
+        <label class="ms-item"><input type="checkbox" value="tens"><span>TENS 電療機</span></label>
+        <div class="ms-grp">Clinical Diagnostics</div>
+        <label class="ms-item"><input type="checkbox" value="rapid-test"><span>Rapid Test</span></label>
+        <label class="ms-item"><input type="checkbox" value="biochem"><span>Biochemistry Analyzer</span></label>
+        <label class="ms-item"><input type="checkbox" value="poct"><span>POCT</span></label>
+        <label class="ms-item"><input type="checkbox" value="reagents"><span>Diagnostic Reagents</span></label>
+      </div>
+    </div>
+    <div class="fblock">
+      <div class="flabel">Region <span id="ch-reg-cnt" class="sel-cnt">0</span></div>
+      <div class="ms-box" id="ch-reg">
+        <label class="ms-item"><input type="checkbox" value="sea"><span>🌏 Southeast Asia</span></label>
+        <label class="ms-item"><input type="checkbox" value="sa"><span>🌏 South Asia</span></label>
+        <label class="ms-item"><input type="checkbox" value="ea"><span>🌏 East Asia</span></label>
+        <label class="ms-item"><input type="checkbox" value="me"><span>🌍 Middle East</span></label>
+        <label class="ms-item"><input type="checkbox" value="eu"><span>🌍 Western Europe</span></label>
+        <label class="ms-item"><input type="checkbox" value="ee"><span>🌍 Eastern Europe</span></label>
+        <label class="ms-item"><input type="checkbox" value="na"><span>🌎 North America</span></label>
+        <label class="ms-item"><input type="checkbox" value="la"><span>🌎 Latin America</span></label>
+        <label class="ms-item"><input type="checkbox" value="af"><span>🌍 Sub-Saharan Africa</span></label>
+        <label class="ms-item"><input type="checkbox" value="au"><span>🌏 Australia & NZ</span></label>
+      </div>
+    </div>
+    <div class="fblock">
+      <div class="flabel">Prospect Type <span id="ch-pt-cnt" class="sel-cnt">0</span></div>
+      <div class="ms-box" id="ch-pt">
+        <label class="ms-item"><input type="checkbox" value="dist"><span>Medical Distributor</span></label>
+        <label class="ms-item"><input type="checkbox" value="imp"><span>Medical Device Importer</span></label>
+        <label class="ms-item"><input type="checkbox" value="retail"><span>Pharmacy / Retail Chain</span></label>
+        <label class="ms-item"><input type="checkbox" value="hosp"><span>Hospital / Clinic</span></label>
+        <label class="ms-item"><input type="checkbox" value="lab"><span>Laboratory / Diagnostics</span></label>
+        <label class="ms-item"><input type="checkbox" value="gov"><span>Government Health Agency</span></label>
+      </div>
+    </div>
+    <div class="fblock" style="border:none;">
+      <button class="btn btn-teal btn-full" id="ch-btn" onclick="runChannelSearch()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find Channel Prospects
+      </button>
+      <button onclick="clearProspects('ch')" class="btn btn-ghost btn-full" style="margin-top:6px;font-size:11px;">✕ Clear Results</button>
+    </div>
+    <div class="plist" id="ch-list"><div class="empty-list">Select filters above and search.</div></div>
+  </div>
+  <div class="pane-right">
+    <div class="welcome" id="ch-welcome">
+      <h2>通路商開發 Channel Prospect Finder</h2>
+      <p>Find distributors, importers, pharmacy chains, hospitals and government agencies worldwide that can carry or procure your products. Select product categories, regions, and prospect types to generate targeted leads.</p>
+      <div class="wstats">
+        <div><div class="wsv" id="ch-stat-t">0</div><div class="wsl">PROSPECTS</div></div>
+        <div><div class="wsv" id="ch-stat-a">0</div><div class="wsl">ACTIVE</div></div>
+        <div><div class="wsv" id="ch-stat-r">0</div><div class="wsl">REGIONS</div></div>
+      </div>
+    </div>
+    <div class="card" id="ch-detail" style="display:none;">
+      <div class="card-h">
+        <div><div class="card-title" id="ch-d-name">—</div><div class="card-sub" id="ch-d-sub">—</div></div>
+        <div class="card-actions">
+          <button class="btn btn-ghost" onclick="openWeb('ch')">🌐 Website</button>
+          <button class="btn btn-teal" onclick="cpEmail('ch')">📧 Copy Email</button>
+          <button class="btn btn-danger" onclick="delP('ch')">✕</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="stab('ch','info',this)">Contact Info</button>
+        <button class="tab" onclick="stab('ch','notes',this)">Notes</button>
+        <button class="tab" onclick="stab('ch','log',this)">Activity</button>
+      </div>
+      <div class="tp active" id="ch-tp-info">
+        <div class="grid2">
+          <div class="fl"><label>Website</label><p id="ch-d-web">—</p></div>
+          <div class="fl"><label>Country</label><p id="ch-d-country">—</p></div>
+          <div class="fl"><label>Contact</label><p id="ch-d-contact">—</p></div>
+          <div class="fl"><label>Phone</label><p id="ch-d-phone">—</p></div>
+          <div class="fl full"><label>Email</label><p id="ch-d-email">—</p></div>
+          <div class="fl full"><label>Address</label><p id="ch-d-addr">—</p></div>
+          <div class="fl full"><label>Description</label><p id="ch-d-desc" style="color:var(--sub);line-height:1.6;">—</p></div>
+        </div>
+      </div>
+      <div class="tp" id="ch-tp-notes">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div><label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px;">Status</label>
+          <select class="sstat" id="ch-sstat" onchange="updStatus('ch')">
+            <option value="new">🟡 New</option><option value="active">🟢 Active</option><option value="cold">⚪ Cold</option>
+          </select></div>
+          <div><label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px;">Notes</label>
+          <textarea id="ch-notes" rows="4" placeholder="Add notes, follow-up reminders..."></textarea></div>
+          <button class="btn btn-teal" style="align-self:flex-start;" onclick="saveNote('ch')">Save</button>
+        </div>
+      </div>
+      <div class="tp" id="ch-tp-log"><div id="ch-alog"></div></div>
+    </div>
+    <div class="tcard" id="ch-table" style="display:none;">
+      <div class="tcard-h">
+        <span class="tcard-title">All Channel Prospects</span>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <input type="text" class="tsearch" placeholder="Filter…" oninput="ftbl('ch-tbody',this.value)">
+          <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px;" onclick="expCSV('ch')">⬇ CSV</button>
+          <button class="btn btn-teal" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('ch')">✉ Sales Assistant</button>
+        </div>
+      </div>
+      <table><thead><tr><th>Organisation</th><th>Type</th><th>Country</th><th>Contact</th><th>Email</th><th>Status</th></tr></thead>
+      <tbody id="ch-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODULE 2: OEM BRAND PROSPECTS ════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-oem">
+  <div class="pane-left">
+    <div class="fblock">
+      <div class="flabel">Product <span id="oem-cat-cnt" class="sel-cnt">0</span></div>
+      <div class="ms-box" id="oem-cat">
+        <label class="ms-item"><input type="checkbox" value="nasal-asp"><span>吸鼻機 Nasal Aspirator</span></label>
+        <label class="ms-item"><input type="checkbox" value="breast-pump"><span>哺乳泵 Breast Pump</span></label>
+        <label class="ms-item"><input type="checkbox" value="thermo-elec"><span>電子體溫計</span></label>
+        <label class="ms-item"><input type="checkbox" value="thermo-ir"><span>紅外線體溫計</span></label>
+        <label class="ms-item"><input type="checkbox" value="bp-monitor"><span>血壓計</span></label>
+        <label class="ms-item"><input type="checkbox" value="glucometer"><span>血糖機</span></label>
+        <label class="ms-item"><input type="checkbox" value="tens"><span>TENS 電療機</span></label>
+        <label class="ms-item"><input type="checkbox" value="nasal-wash"><span>洗鼻機</span></label>
+      </div>
+    </div>
+    <div class="fblock">
+      <div class="flabel">Target Market <span id="oem-reg-cnt" class="sel-cnt">0</span></div>
+      <div class="ms-box" id="oem-reg">
+        <label class="ms-item"><input type="checkbox" value="us"><span>🇺🇸 United States</span></label>
+        <label class="ms-item"><input type="checkbox" value="eu-de"><span>🇩🇪 Germany / DACH</span></label>
+        <label class="ms-item"><input type="checkbox" value="eu-fr"><span>🇫🇷 France / Benelux</span></label>
+        <label class="ms-item"><input type="checkbox" value="uk"><span>🇬🇧 United Kingdom</span></label>
+        <label class="ms-item"><input type="checkbox" value="jp"><span>🇯🇵 Japan</span></label>
+        <label class="ms-item"><input type="checkbox" value="au-nz"><span>🇦🇺 Australia / NZ</span></label>
+        <label class="ms-item"><input type="checkbox" value="sea-brand"><span>🌏 Southeast Asia</span></label>
+        <label class="ms-item"><input type="checkbox" value="me-brand"><span>🌍 Middle East</span></label>
+      </div>
+    </div>
+    <div class="fblock" style="border:none;">
+      <button class="btn btn-gold btn-full" id="oem-btn" onclick="runOEMSearch()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find OEM Brand Buyers
+      </button>
+      <button onclick="clearProspects('oem')" class="btn btn-ghost btn-full" style="margin-top:6px;font-size:11px;">✕ Clear</button>
+    </div>
+    <div class="plist" id="oem-list"><div class="empty-list">Find brand owners seeking OEM manufacturers.</div></div>
+  </div>
+  <div class="pane-right">
+    <div class="welcome" style="background:linear-gradient(135deg,#4A235A 0%,#7D3C98 100%);" id="oem-welcome">
+      <h2>品牌代工客戶 OEM Brand Buyer Finder</h2>
+      <p>Identify global brand owners — like Graco, Braun, Safety 1st, Chicco, Medela — who outsource manufacturing to OEM partners. These are companies that <strong style="color:#f0c8ff;">sell under their own brand but need a Taiwanese manufacturer like you</strong> to produce the products.</p>
+      <div class="wstats">
+        <div><div class="wsv" id="oem-stat-t">0</div><div class="wsl">BRAND PROSPECTS</div></div>
+        <div><div class="wsv" id="oem-stat-a">0</div><div class="wsl">ACTIVE</div></div>
+        <div><div class="wsv" id="oem-stat-r">0</div><div class="wsl">MARKETS</div></div>
+      </div>
+    </div>
+    <div class="card" id="oem-detail" style="display:none;">
+      <div class="card-h">
+        <div><div class="card-title" id="oem-d-name">—</div><div class="card-sub" id="oem-d-sub">—</div></div>
+        <div class="card-actions">
+          <button class="btn btn-ghost" onclick="openWeb('oem')">🌐 Website</button>
+          <button class="btn btn-gold" onclick="cpEmail('oem')">📧 Copy Email</button>
+          <button class="btn btn-danger" onclick="delP('oem')">✕</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="stab('oem','info',this)">Brand Info</button>
+        <button class="tab" onclick="stab('oem','oem-detail',this)">OEM Opportunity</button>
+        <button class="tab" onclick="stab('oem','notes',this)">Notes</button>
+      </div>
+      <div class="tp active" id="oem-tp-info">
+        <div class="grid2">
+          <div class="fl"><label>Website</label><p id="oem-d-web">—</p></div>
+          <div class="fl"><label>HQ Country</label><p id="oem-d-country">—</p></div>
+          <div class="fl"><label>OEM Contact</label><p id="oem-d-contact">—</p></div>
+          <div class="fl"><label>Phone</label><p id="oem-d-phone">—</p></div>
+          <div class="fl full"><label>Email</label><p id="oem-d-email">—</p></div>
+          <div class="fl full"><label>Brand Description</label><p id="oem-d-desc" style="color:var(--sub);line-height:1.6;">—</p></div>
+        </div>
+      </div>
+      <div class="tp" id="oem-tp-oem-detail">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="fl full"><label>OEM Strategy Note</label><p id="oem-d-strat" style="color:var(--sub);line-height:1.7;font-size:12px;">—</p></div>
+          <div class="fl full"><label>Certifications Required</label><p id="oem-d-cert" style="line-height:1.6;font-size:12px;">—</p></div>
+          <div class="fl full"><label>Typical MOQ Range</label><p id="oem-d-moq" style="font-size:12px;">—</p></div>
+        </div>
+      </div>
+      <div class="tp" id="oem-tp-notes">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div><label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px;">Status</label>
+          <select class="sstat" id="oem-sstat" onchange="updStatus('oem')">
+            <option value="new">🟡 New</option><option value="active">🟢 Active</option><option value="cold">⚪ Cold</option>
+          </select></div>
+          <div><label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px;">Notes</label>
+          <textarea id="oem-notes" rows="4" placeholder="Add OEM negotiation notes..."></textarea></div>
+          <button class="btn btn-gold" style="align-self:flex-start;" onclick="saveNote('oem')">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class="tcard" id="oem-table" style="display:none;">
+      <div class="tcard-h">
+        <span class="tcard-title">All OEM Brand Prospects</span>
+        <div style="display:flex;gap:7px;">
+          <input type="text" class="tsearch" placeholder="Filter…" oninput="ftbl('oem-tbody',this.value)">
+          <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px;" onclick="expCSV('oem')">⬇ CSV</button>
+          <button class="btn btn-gold" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('oem')">✉ Sales Assistant</button>
+        </div>
+      </div>
+      <table><thead><tr><th>Brand</th><th>HQ</th><th>OEM Contact</th><th>Email</th><th>Certifications</th><th>Status</th></tr></thead>
+      <tbody id="oem-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODULE 3: COMPETITOR ANALYSIS ════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-comp">
+  <div class="pane-left">
+    <div class="fblock">
+      <div class="flabel">Product Category</div>
+      <select id="comp-cat">
+        <option value="">— Select —</option>
+        <option value="nasal-asp">吸鼻機 Nasal Aspirator</option>
+        <option value="breast-pump">哺乳泵 Breast Pump</option>
+        <option value="thermo-elec">電子體溫計</option>
+        <option value="thermo-ir">紅外線體溫計</option>
+        <option value="bp-monitor">血壓計</option>
+        <option value="glucometer">血糖機</option>
+        <option value="tens">TENS 電療機</option>
+        <option value="nasal-wash">洗鼻機</option>
+      </select>
+    </div>
+    <div class="fblock" style="border:none;">
+      <button class="btn btn-purple btn-full" onclick="runCompAnalysis()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 20h20M6 20V10M12 20V4M18 20v-6"/></svg>
+        Analyse Competitors
+      </button>
+      <button class="btn btn-ghost btn-full" style="margin-top:6px;font-size:11px;" onclick="sendToSA('comp')">✉ Send Contacts to Sales Assistant</button>
+    </div>
+    <div style="padding:12px 14px;font-size:11px;color:var(--sub);line-height:1.6;">
+      Shows real global brands in this category — their pricing tier, key markets, OEM status, strengths & weaknesses. Use this to find your positioning gap.
+    </div>
+  </div>
+  <div class="pane-right">
+    <div class="welcome" style="background:linear-gradient(135deg,#4A235A 0%,#2C3E7A 100%);" id="comp-welcome">
+      <h2>競品分析 Competitor Intelligence</h2>
+      <p>Real global brand analysis for your product categories. Understand who dominates each market, their OEM sourcing behaviour, pricing tier, certifications held, and where you can compete or differentiate as a Taiwanese OEM manufacturer.</p>
+    </div>
+    <div id="comp-results"></div>
+  </div>
+</div>
+
+<!-- ══ MODULE 5: SALES ASSISTANT ════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-sa">
+  <div class="sa-layout" style="width:100%;height:100%;">
+    <div class="sa-left">
+      <div class="sa-counter">Saved Contacts <span id="sa-count">0</span></div>
+      <div style="flex:1;overflow-y:auto;" id="sa-contact-list">
+        <div class="sa-empty">No contacts yet.<br>Run a search in any module<br>and click ✉ Sales Assistant.</div>
+      </div>
+      <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px;">
+        <button class="btn btn-ghost btn-full" style="font-size:11px;" onclick="saSelectAll(true)">☑ Select All</button>
+        <button class="btn btn-ghost btn-full" style="font-size:11px;" onclick="saSelectAll(false)">☐ Deselect All</button>
+        <button class="btn btn-danger btn-full" style="font-size:11px;" onclick="saClearAll()">✕ Clear All Contacts</button>
+      </div>
+    </div>
+    <div class="sa-right">
+      <div class="sa-compose">
+        <div class="sa-compose-h">
+          <span>New Email Draft</span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px;" onclick="saCopyEmails()">📋 Copy Emails</button>
+            <button class="btn btn-teal" style="font-size:11px;padding:5px 10px;" onclick="saOpenMail()">✉ Open in Mail App</button>
+            <button class="btn btn-gold" style="font-size:11px;padding:5px 10px;" onclick="saSendViaSalesAssistant()">🚀 Send via Sales Assistant</button>
+          </div>
+        </div>
+        <!-- To -->
+        <div class="sa-field">
+          <label>To</label>
+          <div class="sa-field-val">
+            <div class="sa-to-tags" id="sa-to-tags"><span style="font-size:11px;color:var(--sub);">Select contacts from the left panel…</span></div>
+          </div>
+        </div>
+        <!-- CC -->
+        <div class="sa-field">
+          <label>CC</label>
+          <div class="sa-field-val">
+            <input type="text" id="sa-cc" value="david.tsai@nubecca.com" style="margin-top:4px;font-size:11px;">
+          </div>
+        </div>
+        <!-- Subject -->
+        <div class="sa-field">
+          <label>Subject</label>
+          <div class="sa-field-val">
+            <input type="text" id="sa-subject" placeholder="e.g. OEM Partnership Inquiry — Medical Device Manufacturing" style="margin-top:4px;">
+          </div>
+        </div>
+        <!-- DM Attachments -->
+        <div style="padding:10px 18px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;">Attachments (Nubecca DMs)</label>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost" style="font-size:10px;padding:3px 8px;" onclick="saLoadDMs()">↻ Reload</button>
+              <button class="btn btn-ghost" style="font-size:10px;padding:3px 8px;" onclick="saSelectAllDMs(true)">全選</button>
+              <button class="btn btn-ghost" style="font-size:10px;padding:3px 8px;" onclick="saSelectAllDMs(false)">清除</button>
+            </div>
+          </div>
+          <div id="sa-dm-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px;max-height:160px;overflow-y:auto;">
+            <div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--sub);font-size:11px;" id="sa-dm-status">
+              載入中… <span style="display:inline-block;width:12px;height:12px;border:2px solid var(--teal);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;"></span>
+            </div>
+          </div>
+          <div id="sa-dm-sel-count" style="font-size:10px;color:var(--teal);margin-top:6px;font-weight:600;"></div>
+        </div>
+        <!-- Body -->
+        <div class="sa-body-wrap">
+          <label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px;">Body</label>
+          <textarea id="sa-body" placeholder="Write your outreach email here…">Dear [Contact Name],
+
+I hope this message finds you well. My name is [Your Name] from [Your Company], a Taiwan-based medical device manufacturer specialising in OEM/ODM production.
+
+We have reviewed your company's profile and believe there is a strong alignment with our manufacturing capabilities. We would welcome the opportunity to explore a potential partnership.
+
+Our key strengths include:
+• ISO 13485 certified manufacturing facility
+• CE MDR and FDA 510(k) cleared product lines
+• Full OEM/ODM capability with competitive MOQ from 500 units
+• Rapid prototyping and custom design services
+
+We would be delighted to arrange a brief call or send our product catalogue and certifications at your convenience.
+
+Best regards,
+[Your Name]
+[Title] | [Company]
+[Phone] | [Email]</textarea>
+        </div>
+        <div class="sa-actions">
+          <button class="btn btn-ghost" style="font-size:11px;" onclick="saInsertTemplate('intro')">+ Intro Template</button>
+          <button class="btn btn-ghost" style="font-size:11px;" onclick="saInsertTemplate('followup')">+ Follow-up Template</button>
+          <button class="btn btn-ghost" style="font-size:11px;" onclick="saInsertTemplate('oem')">+ OEM Pitch Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODULE 4: OEM STRATEGY ════════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod-strat">
+  <div class="pane-left">
+    <div class="fblock">
+      <div class="flabel">Focus Product</div>
+      <select id="strat-cat">
+        <option value="">— Select —</option>
+        <option value="nasal-asp">吸鼻機 Nasal Aspirator</option>
+        <option value="breast-pump">哺乳泵 Breast Pump</option>
+        <option value="thermo-elec">電子體溫計</option>
+        <option value="thermo-ir">紅外線體溫計</option>
+        <option value="bp-monitor">血壓計</option>
+        <option value="glucometer">血糖機</option>
+        <option value="tens">TENS 電療機</option>
+        <option value="nasal-wash">洗鼻機</option>
+      </select>
+    </div>
+    <div class="fblock">
+      <div class="flabel">Your Capability</div>
+      <div class="ms-box" id="strat-cap" style="max-height:130px;">
+        <label class="ms-item"><input type="checkbox" value="ce"><span>CE / CE IVD Marking</span></label>
+        <label class="ms-item"><input type="checkbox" value="fda"><span>US FDA 510(k) / 21 CFR</span></label>
+        <label class="ms-item"><input type="checkbox" value="iso13485"><span>ISO 13485</span></label>
+        <label class="ms-item"><input type="checkbox" value="iso9001"><span>ISO 9001</span></label>
+        <label class="ms-item"><input type="checkbox" value="bsci"><span>BSCI / Social Audit</span></label>
+        <label class="ms-item"><input type="checkbox" value="oem"><span>Full OEM / ODM</span></label>
+        <label class="ms-item"><input type="checkbox" value="private-label"><span>Private Label Ready</span></label>
+        <label class="ms-item"><input type="checkbox" value="ecommerce"><span>E-Commerce Ready (Amazon)</span></label>
+      </div>
+    </div>
+    <div class="fblock" style="border:none;">
+      <button class="btn btn-green btn-full" onclick="runStrategyPlan()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Generate Strategy Plan
+      </button>
+      <button class="btn btn-ghost btn-full" style="margin-top:6px;font-size:11px;" onclick="sendToSA('strat')">✉ Send Targets to Sales Assistant</button>
+    </div>
+  </div>
+  <div class="pane-right">
+    <div class="welcome" style="background:linear-gradient(135deg,#145A32 0%,var(--steel) 100%);" id="strat-welcome">
+      <h2>代工策略規劃 OEM Strategy Planner</h2>
+      <p>Based on your product focus and existing certifications, this module generates a phased OEM market entry strategy — identifying which brands to target first, what certifications to prioritise, how to pitch, and what MOQ / pricing positioning to adopt.</p>
+    </div>
+    <div id="strat-results"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ DATA ══════════════════════════════════════════════════════════════════════
+
+const CAT_LABEL = {
+  "thermo-elec":"電子體溫計","thermo-ir":"紅外線體溫計","bp-monitor":"血壓計",
+  "glucometer":"血糖機","nasal-asp":"吸鼻機","nasal-wash":"洗鼻機",
+  "breast-pump":"哺乳泵","tens":"TENS 電療機","rapid-test":"Rapid Test",
+  "biochem":"Biochemistry Analyzer","poct":"POCT","reagents":"Diagnostic Reagents"
+};
+const TYPE_LABEL = {
+  dist:"Medical Distributor",imp:"Medical Device Importer",retail:"Pharmacy / Retail Chain",
+  hosp:"Hospital / Clinic",lab:"Laboratory",gov:"Government Agency",brand:"Brand Owner / OEM Buyer"
+};
+const REGION_LABEL = {
+  sea:"Southeast Asia",sa:"South Asia",ea:"East Asia",me:"Middle East",
+  eu:"Western Europe",ee:"Eastern Europe",na:"North America",
+  la:"Latin America",af:"Sub-Saharan Africa",au:"Australia & NZ"
+};
+
+// Region company pools — expanded to 15 per region
+const RC = {
+  sea:[
+    {name:"Zuellig Pharma",country:"Thailand",domain:"zuelligpharma.com",city:"Bangkok"},
+    {name:"PT Enseval Putera",country:"Indonesia",domain:"enseval.com",city:"Jakarta"},
+    {name:"Caring Pharmacy Group",country:"Malaysia",domain:"caringpharmacy.com",city:"Petaling Jaya"},
+    {name:"Mercury Drug Corporation",country:"Philippines",domain:"mercurydrug.com",city:"Quezon City"},
+    {name:"Long Chau Pharmacy",country:"Vietnam",domain:"nhathuoclongchau.com.vn",city:"Ho Chi Minh City"},
+    {name:"Trans Medic Pte Ltd",country:"Singapore",domain:"transmedic.com",city:"Singapore"},
+    {name:"Duopharma Biotech",country:"Malaysia",domain:"duopharma.com.my",city:"Kuala Lumpur"},
+    {name:"Kimia Farma",country:"Indonesia",domain:"kimiafarma.co.id",city:"Bandung"},
+    {name:"Watsons Health",country:"Thailand",domain:"watsons.co.th",city:"Bangkok"},
+    {name:"Mega Lifesciences",country:"Thailand",domain:"megalifesciences.com",city:"Samut Prakan"},
+    {name:"Guardian Healthcare",country:"Singapore",domain:"guardian.com.sg",city:"Singapore"},
+    {name:"Multicare Pharmaceutical",country:"Philippines",domain:"multicare.com.ph",city:"Pasig City"},
+    {name:"DKSH Healthcare Thailand",country:"Thailand",domain:"dksh.com/th",city:"Bangkok"},
+    {name:"Medpharco Vietnam",country:"Vietnam",domain:"medpharco.com",city:"Hanoi"},
+    {name:"BioIsland Medical",country:"Malaysia",domain:"bioisland.com.my",city:"Shah Alam"}
+  ],
+  sa:[
+    {name:"Cipla Limited",country:"India",domain:"cipla.com",city:"Mumbai"},
+    {name:"Medisave Pakistan",country:"Pakistan",domain:"medisave.com.pk",city:"Karachi"},
+    {name:"Square Pharmaceuticals",country:"Bangladesh",domain:"squarepharma.com.bd",city:"Dhaka"},
+    {name:"Hemas Holdings PLC",country:"Sri Lanka",domain:"hemas.com",city:"Colombo"},
+    {name:"Abbott India Ltd",country:"India",domain:"abbott.co.in",city:"Mumbai"},
+    {name:"CG Health Nepal",country:"Nepal",domain:"cghealth.com.np",city:"Kathmandu"},
+    {name:"Apollo Hospitals Pharmacy",country:"India",domain:"apollopharmacy.in",city:"Hyderabad"},
+    {name:"Mankind Pharma",country:"India",domain:"mankindpharma.com",city:"New Delhi"},
+    {name:"Unichem Laboratories",country:"India",domain:"unichemlabs.com",city:"Mumbai"},
+    {name:"Dr. Reddy's Laboratories",country:"India",domain:"drreddys.com",city:"Hyderabad"},
+    {name:"MedPlus Health Services",country:"India",domain:"medplusmart.com",city:"Hyderabad"},
+    {name:"Berger Pharma Bangladesh",country:"Bangladesh",domain:"bergerpharmabd.com",city:"Chittagong"},
+    {name:"Lanka Hospitals Corporation",country:"Sri Lanka",domain:"lankahospitals.com",city:"Colombo"},
+    {name:"OSP Health Pakistan",country:"Pakistan",domain:"osphealth.pk",city:"Lahore"},
+    {name:"Narayana Health India",country:"India",domain:"narayanahealth.org",city:"Bengaluru"}
+  ],
+  ea:[
+    {name:"Suzuken Co. Ltd",country:"Japan",domain:"suzuken.co.jp",city:"Nagoya"},
+    {name:"GS Healthcare",country:"South Korea",domain:"gshealthcare.co.kr",city:"Seoul"},
+    {name:"Sinopharm Medical Supply",country:"China",domain:"sinopharm.com",city:"Beijing"},
+    {name:"Mannings Health",country:"Hong Kong",domain:"mannings.com.hk",city:"Hong Kong"},
+    {name:"DKSH Korea Ltd",country:"South Korea",domain:"dksh.com/kr",city:"Seoul"},
+    {name:"Ever Rich Health Co.",country:"Taiwan",domain:"everrichhealth.com.tw",city:"Taipei"},
+    {name:"Ain Pharmaciez",country:"Japan",domain:"ainpharmacies.co.jp",city:"Sapporo"},
+    {name:"Matsumoto Kiyoshi",country:"Japan",domain:"matsukiyo.co.jp",city:"Matsudo"},
+    {name:"Welcia Holdings",country:"Japan",domain:"welcia.co.jp",city:"Tokyo"},
+    {name:"Yuhan Corporation",country:"South Korea",domain:"yuhan.co.kr",city:"Seoul"},
+    {name:"CJ Healthcare",country:"South Korea",domain:"cjhealthcare.co.kr",city:"Seoul"},
+    {name:"CR Pharma China",country:"China",domain:"crnhc.com.cn",city:"Shanghai"},
+    {name:"PharmaLink HK",country:"Hong Kong",domain:"pharmalinkhk.com",city:"Hong Kong"},
+    {name:"MedMark Taiwan",country:"Taiwan",domain:"medmark.com.tw",city:"Taipei"},
+    {name:"Guangzhou Pharmaceutical",country:"China",domain:"gpc.com.cn",city:"Guangzhou"}
+  ],
+  me:[
+    {name:"Al Nahdi Medical",country:"Saudi Arabia",domain:"alnahdi.com.sa",city:"Jeddah"},
+    {name:"Aster Pharmacy UAE",country:"UAE",domain:"asterpharmacy.ae",city:"Dubai"},
+    {name:"Boots Health ME",country:"UAE",domain:"boots.com.ae",city:"Dubai"},
+    {name:"Medi Pharma Qatar",country:"Qatar",domain:"medipharmaqatar.com",city:"Doha"},
+    {name:"Dawaa Pharmacy",country:"Kuwait",domain:"dawaa.com.kw",city:"Kuwait City"},
+    {name:"United Pharmacies Jordan",country:"Jordan",domain:"unitedpharmacies.jo",city:"Amman"},
+    {name:"Gulf Drug LLC",country:"UAE",domain:"gulfdrug.ae",city:"Dubai"},
+    {name:"Spimaco",country:"Saudi Arabia",domain:"spimaco.com.sa",city:"Riyadh"},
+    {name:"DKSH Middle East",country:"UAE",domain:"dksh.com/ae",city:"Dubai"},
+    {name:"Al Tamimi Medical",country:"Bahrain",domain:"altamimimedical.com",city:"Manama"},
+    {name:"Oman Pharmaceutical Products",country:"Oman",domain:"opp.om",city:"Muscat"},
+    {name:"Pharma International",country:"Jordan",domain:"pharmaintl.com",city:"Amman"},
+    {name:"Dawa Pharma Egypt",country:"Egypt",domain:"dawapharma.eg",city:"Cairo"},
+    {name:"Ithal Medical Turkey",country:"Turkey",domain:"ithalmedical.com.tr",city:"Istanbul"},
+    {name:"MedTech Lebanon",country:"Lebanon",domain:"medtechlb.com",city:"Beirut"}
+  ],
+  eu:[
+    {name:"Beurer GmbH",country:"Germany",domain:"beurer.com",city:"Ulm"},
+    {name:"Boots Healthcare UK",country:"United Kingdom",domain:"boots.com",city:"Nottingham"},
+    {name:"Hartmann Group",country:"Germany",domain:"hartmann.info",city:"Heidenheim"},
+    {name:"Pic Solution (Artsana)",country:"Italy",domain:"artsana.com",city:"Grandate"},
+    {name:"Laboratoires Urgo",country:"France",domain:"urgo.fr",city:"Dijon"},
+    {name:"DKSH Healthcare Europe",country:"Switzerland",domain:"dksh.com",city:"Zurich"},
+    {name:"Alliance Healthcare UK",country:"United Kingdom",domain:"alliancehealthcare.co.uk",city:"Chessington"},
+    {name:"McKesson Europe",country:"Germany",domain:"mckesson.eu",city:"Darmstadt"},
+    {name:"Sanacorp Germany",country:"Germany",domain:"sanacorp.de",city:"Munich"},
+    {name:"Brocacef Netherlands",country:"Netherlands",domain:"brocacef.nl",city:"Maarssen"},
+    {name:"Phoenix Group Germany",country:"Germany",domain:"phoenix-group.eu",city:"Mannheim"},
+    {name:"Medline Europe",country:"France",domain:"medline.com/eu",city:"Paris"},
+    {name:"Invacare Europe",country:"Netherlands",domain:"invacare.eu",city:"Elyria"},
+    {name:"Laboratorios Almirall",country:"Spain",domain:"almirall.com",city:"Barcelona"},
+    {name:"OCP France",country:"France",domain:"ocp.fr",city:"Paris"}
+  ],
+  ee:[
+    {name:"Neuca SA",country:"Poland",domain:"neuca.pl",city:"Toruń"},
+    {name:"Alliance Healthcare Czech",country:"Czech Republic",domain:"alliancehealthcare.cz",city:"Prague"},
+    {name:"Richter Gedeon",country:"Hungary",domain:"richter.hu",city:"Budapest"},
+    {name:"Farmexpert DCI",country:"Romania",domain:"farmexpert.ro",city:"Bucharest"},
+    {name:"Phoenix Slovakia",country:"Slovakia",domain:"phoenix.sk",city:"Bratislava"},
+    {name:"Biopharma Ukraine",country:"Ukraine",domain:"biopharma.ua",city:"Kyiv"},
+    {name:"Pelion SA",country:"Poland",domain:"pelion.eu",city:"Łódź"},
+    {name:"Farmacol Poland",country:"Poland",domain:"farmacol.com.pl",city:"Katowice"},
+    {name:"Salus Hungary",country:"Hungary",domain:"salus.hu",city:"Debrecen"},
+    {name:"Gedeon Richter",country:"Hungary",domain:"gedeonrichter.com",city:"Budapest"},
+    {name:"Alkaloid AD",country:"North Macedonia",domain:"alkaloid.com.mk",city:"Skopje"},
+    {name:"Alliance Healthcare Romania",country:"Romania",domain:"alliancehealthcare.ro",city:"Cluj-Napoca"},
+    {name:"Galenika Serbia",country:"Serbia",domain:"galenika.rs",city:"Belgrade"},
+    {name:"Baltic Medicus",country:"Lithuania",domain:"balticmedicus.lt",city:"Vilnius"},
+    {name:"Tamro Estonia",country:"Estonia",domain:"tamro.ee",city:"Tallinn"}
+  ],
+  na:[
+    {name:"McKesson Medical-Surgical",country:"USA",domain:"mckesson.com",city:"Richmond VA"},
+    {name:"Henry Schein Medical",country:"USA",domain:"henryschein.com",city:"Melville NY"},
+    {name:"Medline Industries",country:"USA",domain:"medline.com",city:"Northfield IL"},
+    {name:"Cardinal Health Canada",country:"Canada",domain:"cardinalhealth.ca",city:"Toronto"},
+    {name:"Shoppers Drug Mart",country:"Canada",domain:"shoppersdrugmart.ca",city:"Toronto"},
+    {name:"Fisher Healthcare",country:"USA",domain:"fisherhealthcare.com",city:"Pittsburgh PA"},
+    {name:"AmerisourceBergen",country:"USA",domain:"amerisourcebergen.com",city:"Conshohocken PA"},
+    {name:"Patterson Companies",country:"USA",domain:"pattersoncompanies.com",city:"St. Paul MN"},
+    {name:"Owens & Minor",country:"USA",domain:"owens-minor.com",city:"Mechanicsville VA"},
+    {name:"Walgreens Health Division",country:"USA",domain:"walgreens.com",city:"Deerfield IL"},
+    {name:"CVS Health Supply",country:"USA",domain:"cvshealth.com",city:"Woonsocket RI"},
+    {name:"Rite Aid Health",country:"USA",domain:"riteaid.com",city:"Camp Hill PA"},
+    {name:"London Drugs Canada",country:"Canada",domain:"londondrugs.com",city:"Richmond BC"},
+    {name:"Pharmasave Canada",country:"Canada",domain:"pharmasave.com",city:"Langley BC"},
+    {name:"Walmart Health Supply",country:"USA",domain:"walmart.com/health",city:"Bentonville AR"}
+  ],
+  la:[
+    {name:"Genomma Lab Internacional",country:"Mexico",domain:"genommalab.com",city:"Mexico City"},
+    {name:"Eurofarma Brasil",country:"Brazil",domain:"eurofarma.com.br",city:"São Paulo"},
+    {name:"Tecnoquimicas",country:"Colombia",domain:"tqimicas.com",city:"Cali"},
+    {name:"Farmacias Ahumada",country:"Chile",domain:"farmaciasahumada.cl",city:"Santiago"},
+    {name:"InRetail Pharma",country:"Peru",domain:"inretailpharma.com.pe",city:"Lima"},
+    {name:"Nadro SA de CV",country:"Mexico",domain:"nadro.com.mx",city:"Mexico City"},
+    {name:"Raia Drogasil",country:"Brazil",domain:"raia.com.br",city:"São Paulo"},
+    {name:"Laboratorio Chile",country:"Chile",domain:"laboratoriochile.cl",city:"Santiago"},
+    {name:"Procaps Group",country:"Colombia",domain:"procaps.com.co",city:"Barranquilla"},
+    {name:"Farmacias Cruz Verde",country:"Chile",domain:"cruzverde.cl",city:"Santiago"},
+    {name:"Farmacorp Bolivia",country:"Bolivia",domain:"farmacorp.com.bo",city:"Santa Cruz"},
+    {name:"Laboratorios Roemmers",country:"Argentina",domain:"roemmers.com.ar",city:"Buenos Aires"},
+    {name:"Farmacias del Ahorro",country:"Mexico",domain:"fahorro.com",city:"Mexico City"},
+    {name:"Medifarma Peru",country:"Peru",domain:"medifarma.com.pe",city:"Lima"},
+    {name:"Drogueria EMPSEPSA",country:"Ecuador",domain:"empsepsa.com.ec",city:"Guayaquil"}
+  ],
+  af:[
+    {name:"Adcock Ingram Healthcare",country:"South Africa",domain:"adcock.com",city:"Johannesburg"},
+    {name:"Chanrai Health Africa",country:"Nigeria",domain:"chanraihealth.com",city:"Lagos"},
+    {name:"Vivo Healthcare Ltd",country:"Kenya",domain:"vivohealthcare.com",city:"Nairobi"},
+    {name:"Cipla Quality Chemical",country:"Uganda",domain:"ciplaqualitychem.com",city:"Kampala"},
+    {name:"Minet Healthcare",country:"Tanzania",domain:"minet.co.tz",city:"Dar es Salaam"},
+    {name:"Pharmanova Ghana",country:"Ghana",domain:"pharmanova.com.gh",city:"Accra"},
+    {name:"Aspen Pharmacare",country:"South Africa",domain:"aspenpharmacares.com",city:"Durban"},
+    {name:"Strides Pharma Africa",country:"Uganda",domain:"strides.com",city:"Kampala"},
+    {name:"Aga Khan Health Services",country:"Kenya",domain:"akhs.org",city:"Nairobi"},
+    {name:"Dana Pharmaceuticals",country:"Ethiopia",domain:"danapharma.com",city:"Addis Ababa"},
+    {name:"Emcure Africa",country:"South Africa",domain:"emcure.co.za",city:"Cape Town"},
+    {name:"Cosmos Limited",country:"Kenya",domain:"cosmoslimited.com",city:"Nairobi"},
+    {name:"MedPharm Nigeria",country:"Nigeria",domain:"medpharmnigeria.com",city:"Abuja"},
+    {name:"Alpha Pharm",country:"South Africa",domain:"alphapharm.co.za",city:"Pretoria"},
+    {name:"Mission For Essential Drugs",country:"Tanzania",domain:"meds.or.tz",city:"Dar es Salaam"}
+  ],
+  au:[
+    {name:"EBOS Group Australia",country:"Australia",domain:"ebos.com.au",city:"Sydney"},
+    {name:"Sigma Healthcare",country:"Australia",domain:"sigmahealthcare.com.au",city:"Melbourne"},
+    {name:"Terry White Chemmart",country:"Australia",domain:"terrywhitechemmart.com.au",city:"Brisbane"},
+    {name:"Priceline Pharmacy",country:"Australia",domain:"priceline.com.au",city:"Melbourne"},
+    {name:"Healthcare Logistics NZ",country:"New Zealand",domain:"healthcarelogistics.co.nz",city:"Auckland"},
+    {name:"Countdown Health NZ",country:"New Zealand",domain:"countdown.co.nz",city:"Auckland"},
+    {name:"API (Australian Pharmaceutical)",country:"Australia",domain:"api.net.au",city:"Sydney"},
+    {name:"Symbion Health",country:"Australia",domain:"symbion.com.au",city:"Melbourne"},
+    {name:"Chemist Warehouse",country:"Australia",domain:"chemistwarehouse.com.au",city:"Melbourne"},
+    {name:"Guardian Pharmacy Australia",country:"Australia",domain:"guardianpharmacy.com.au",city:"Sydney"},
+    {name:"Pharmacy 777",country:"Australia",domain:"pharmacy777.com.au",city:"Perth"},
+    {name:"Unichem Pharmacies NZ",country:"New Zealand",domain:"unichem.co.nz",city:"Wellington"},
+    {name:"Green Cross Health NZ",country:"New Zealand",domain:"greencross.co.nz",city:"Auckland"},
+    {name:"TerryWhite Chemist Group",country:"Australia",domain:"twcg.com.au",city:"Brisbane"},
+    {name:"Amcal Pharmacy",country:"Australia",domain:"amcal.com.au",city:"Sydney"}
+  ]
+};
+
+// OEM Brand prospects — real global brands by product + market
+const OEM_BRANDS = {
+  "nasal-asp":{
+    "us":[
+      {name:"Graco",hq:"USA",web:"https://www.gracobaby.com",contact:"Sarah Mitchell, VP Global Sourcing",email:"s.mitchell@gracobaby.com",phone:"+1 610 286 5951",strat:"Graco is the #1 baby product brand in North America. They outsource nasal aspirator manufacturing to Asian OEM partners. Entry point is via their product development team in Atlanta. Lead time expectations are 90–120 days, with strong packaging and UL/ASTM compliance requirements.",cert:"ASTM F963, BPA-Free certification, ISO 9001",moq:"5,000–20,000 units per SKU"},
+      {name:"Safety 1st (Dorel)",hq:"USA",web:"https://www.safety1st.com",contact:"James O'Brien, Director OEM Procurement",email:"j.obrien@dorel.com",phone:"+1 514 744 8220",strat:"Safety 1st is Dorel Juvenile's mass-market brand sold at Walmart, Target, Amazon. They actively source from Taiwanese and Chinese OEM manufacturers for baby health devices. Competitive on price — target landing cost <$4 USD per unit for basic aspirators.",cert:"FDA 510(k) (if medical claim), CPSC, ASTM",moq:"10,000–50,000 units per run"},
+      {name:"Summer Infant",hq:"USA",web:"https://www.summerinfant.com",contact:"Lisa Park, Senior Buyer Product Development",email:"l.park@summerinfant.com",phone:"+1 401 671 6550",strat:"Summer Infant is an Amazon-native baby brand actively seeking lower-cost OEM supply for their health product line. They are very open to Taiwan partners with FDA facility registration and CE marks for dual-market supply.",cert:"FDA Facility Registration, CE Mark, Amazon compliance",moq:"3,000–10,000 units"}
+    ],
+    "eu-de":[
+      {name:"Chicco (Artsana)",hq:"Italy",web:"https://www.chicco.com",contact:"Marco Ferrario, Global OEM Sourcing Director",email:"m.ferrario@artsana.com",phone:"+39 031 382 111",strat:"Chicco is Europe's leading baby brand with 50+ year history. They OEM most of their baby health accessories in Taiwan and Korea. Nasal aspirator line is currently under review for new generation products — an active opportunity window for 2025–2026.",cert:"CE Mark, EN 71, ISO 13485 (preferred)",moq:"8,000–25,000 units"},
+      {name:"NUK (MAPA GmbH)",hq:"Germany",web:"https://www.nuk.de",contact:"Dr. Klaus Weinberger, Head of Product Development",email:"k.weinberger@nuk.de",phone:"+49 6172 99 0",strat:"NUK is Germany's most trusted baby health brand. They have a dedicated OEM qualification process through their parent MAPA GmbH. Taiwanese suppliers need ISO 13485 and REACH compliance. Decision cycle is 9–18 months but contracts are multi-year.",cert:"CE Mark, REACH, RoHS, ISO 13485",moq:"15,000–40,000 units"}
+    ],
+    "uk":[
+      {name:"Tommee Tippee (Mayborn)",hq:"UK",web:"https://www.tommeetippee.com",contact:"Emily Clarke, Head of Global Supply",email:"e.clarke@mayborn.com",phone:"+44 191 415 4455",strat:"Tommee Tippee is the UK's #1 baby brand. They actively OEM from Asia and have existing Taiwanese partners. Current interest is in electric nasal aspirators and hygiene-focused designs. UKCA + CE dual marking now required post-Brexit.",cert:"UKCA, CE Mark, EN 71, ISO 9001",moq:"10,000–30,000 units"}
+    ],
+    "jp":[
+      {name:"Pigeon Corporation",hq:"Japan",web:"https://www.pigeon.co.jp",contact:"Yuki Tanaka, Procurement Division",email:"y.tanaka@pigeon.co.jp",phone:"+81 3 3661 4321",strat:"Pigeon is Japan's premium baby health brand with strict J-Standard quality requirements. They OEM in Taiwan for export markets (non-Japan) — a realistic entry via their international division. Japanese domestic product requires MHLW certification.",cert:"PSE Mark, ISO 13485, JIS standards",moq:"5,000–20,000 units"}
+    ],
+    "au-nz":[
+      {name:"Oricom International",hq:"Australia",web:"https://www.oricom.com.au",contact:"Mark Stevens, Managing Director",email:"m.stevens@oricom.com.au",phone:"+61 2 9648 8888",strat:"Australian baby health brand actively sourcing OEM products from Taiwan and China. Small-to-mid volume requirements make them an ideal first OEM customer for market entry into ANZ. CE + TGA registration support expected from supplier.",cert:"TGA registration, CE Mark, AS/NZS standards",moq:"2,000–8,000 units"}
+    ]
+  },
+  "breast-pump":{
+    "us":[
+      {name:"Spectra Baby USA",hq:"USA",web:"https://www.spectra-baby.com",contact:"Christine Yoo, VP OEM & Product",email:"c.yoo@spectra-baby.com",phone:"+1 714 252 0700",strat:"Spectra is a Korean-American brand currently among the top hospital-grade breast pump brands in the US. They have begun expanding their accessories line and are open to OEM partnerships for manual pumps and accessories from Taiwanese manufacturers.",cert:"FDA 510(k), UL Listed, ISO 13485",moq:"3,000–10,000 units"},
+      {name:"Lansinoh Laboratories",hq:"USA",web:"https://www.lansinoh.com",contact:"Patricia Adams, Director Product Development",email:"p.adams@lansinoh.com",phone:"+1 703 790 9700",strat:"Lansinoh is a leading breastfeeding accessories brand (breast pumps, bags, pads). They OEM electric breast pumps from Asian manufacturers. FDA 510(k) is mandatory. Their product team evaluates new OEM partners annually in Q3–Q4.",cert:"FDA 510(k), BPA-Free, ISO 13485",moq:"5,000–15,000 units"}
+    ],
+    "eu-de":[
+      {name:"Ardo Medical AG",hq:"Switzerland",web:"https://www.ardomedical.com",contact:"Stephanie Brunner, Head of OEM Supply Chain",email:"s.brunner@ardomedical.com",phone:"+41 41 368 6565",strat:"Swiss medical-grade breast pump manufacturer with OEM supply partnerships for accessories and lower-tier products. ISO 13485 and EU MDR compliance are non-negotiable. Long qualification process but stable multi-year contracts.",cert:"CE MDR, ISO 13485, EU MDR 2017/745",moq:"5,000–20,000 units"},
+      {name:"Tigex (Dorel Europe)",hq:"France",web:"https://www.tigex.fr",contact:"Sophie Blanchard, Category Manager Babycare",email:"s.blanchard@tigex.fr",phone:"+33 1 4977 2100",strat:"Tigex is Dorel's French baby brand with strong retail presence in Carrefour, Auchan, and Intermarché. They OEM breast pumps and accessories from Asia — Taiwan preferred for quality positioning. CE and NF mark required.",cert:"CE Mark, NF Mark, EN 13402",moq:"5,000–12,000 units"}
+    ]
+  },
+  "bp-monitor":{
+    "us":[
+      {name:"A&D Medical",hq:"USA",web:"https://www.aanddmedical.com",contact:"Kevin Matsuda, Director OEM Business",email:"k.matsuda@aanddmedical.com",phone:"+1 408 263 5333",strat:"A&D Medical is the US arm of Japan's A&D Company. They OEM some models from Taiwan partners. FDA clearance + cuffless accuracy validation is critical. Best entry via their US OEM sourcing team in San Jose.",cert:"FDA 510(k), CE Mark, ISO 13485",moq:"5,000–20,000 units"},
+      {name:"Greater Goods",hq:"USA",web:"https://www.greatergoods.com",contact:"Alex Torres, Head of Product Sourcing",email:"a.torres@greatergoods.com",phone:"+1 314 200 3303",strat:"Greater Goods is a fast-growing DTC health brand on Amazon. They OEM blood pressure monitors, scales, and glucose meters from Asian manufacturers. Less regulatory burden than hospital-grade — good entry-level OEM partner.",cert:"FDA 510(k), CE Mark, Amazon compliance",moq:"1,000–5,000 units"}
+    ],
+    "eu-de":[
+      {name:"Beurer GmbH",hq:"Germany",web:"https://www.beurer.com",contact:"Claudia Weber, Head of International OEM Sourcing",email:"c.weber@beurer.com",phone:"+49 731 3989 0",strat:"Beurer is Germany's largest consumer health device brand with global distribution. They actively OEM blood pressure monitors from Taiwan and maintain long-term OEM relationships. ISO 13485 and CE MDR required. Annual OEM vendor review in Q1.",cert:"CE MDR, ISO 13485, REACH, RoHS",moq:"10,000–50,000 units"},
+      {name:"Microlife AG",hq:"Switzerland",web:"https://www.microlife.com",contact:"Thomas Geiger, VP Global OEM",email:"t.geiger@microlife.com",phone:"+41 71 727 7070",strat:"Swiss brand Microlife is actually a Taiwanese-Swiss company (HQ in Widnau) — they have deep OEM relationships with Taiwanese manufacturers for private-label supply to European distributors. Ideal OEM partner profile.",cert:"CE MDR, ISO 13485, ESH/ESC validation",moq:"5,000–30,000 units"}
+    ]
+  },
+  "tens":{
+    "eu-de":[
+      {name:"Beurer GmbH",hq:"Germany",web:"https://www.beurer.com",contact:"Claudia Weber, Head of International OEM Sourcing",email:"c.weber@beurer.com",phone:"+49 731 3989 0",strat:"Beurer is the leading TENS/EMS consumer brand in Europe. They OEM TENS units from Asia (Taiwan/China) for their consumer range. ISO 13485 and CE MDR Class IIa are required. Annual sourcing review in Q2 — strong interest in wireless TENS technology.",cert:"CE MDR Class IIa, ISO 13485, IEC 60601-1",moq:"5,000–20,000 units"},
+      {name:"Compex (DJO Global)",hq:"Switzerland",web:"https://www.compex.com",contact:"Antoine Leroy, Head of EMS Product OEM",email:"a.leroy@compex.com",phone:"+33 4 7682 5000",strat:"Compex is the premium EMS/TENS brand for sports and rehabilitation. They maintain OEM supply relationships for their mid-range product lines. Taiwanese manufacturers with IEC 60601-1 compliance and CE MDR Class IIa are preferred.",cert:"CE MDR Class IIa, IEC 60601-1, ISO 13485",moq:"3,000–10,000 units"}
+    ],
+    "us":[
+      {name:"iReliev",hq:"USA",web:"https://www.ireliev.com",contact:"Bob Johnson, CEO & Procurement",email:"b.johnson@ireliev.com",phone:"+1 800 939 6913",strat:"iReliev is a fast-growing DTC TENS brand on Amazon. They OEM all products from Asian manufacturers. FDA 510(k) Class II clearance required. Smaller MOQs accepted — excellent entry-level OEM relationship for US market expansion.",cert:"FDA 510(k) Class II, UL Listed",moq:"1,000–5,000 units"},
+      {name:"TechCare Massager",hq:"USA",web:"https://www.techcaremassager.com",contact:"David Lam, Director Product Development",email:"d.lam@techcaremassager.com",phone:"+1 626 888 5888",strat:"TechCare is one of the top-selling TENS brands on Amazon USA. Taiwanese OEM origin company — they understand Taiwan manufacturing and actively use Taiwanese partners for new product development.",cert:"FDA 510(k), CE Mark",moq:"500–3,000 units"}
+    ]
+  },
+  "thermo-elec":{
+    "us":[
+      {name:"Helen of Troy (Vicks/Braun US)",hq:"USA",web:"https://www.hotus.com",contact:"Patricia Rowe, VP Global Product Sourcing",email:"p.rowe@hotus.com",phone:"+1 915 225 8000",strat:"Helen of Troy owns Vicks, Braun (US rights), and other health brands. They OEM electronic thermometers entirely from Asian manufacturers. Taiwan is a preferred source for accuracy-validated devices. Annual sourcing review in Q2. Strong interest in contactless/dual-mode models.",cert:"FDA 510(k), ASTM E1112, CE Mark",moq:"5,000–25,000 units"},
+      {name:"Exergen Corporation",hq:"USA",web:"https://www.exergen.com",contact:"Dr. Francesco Pompei, Founder & CTO",email:"f.pompei@exergen.com",phone:"+1 617 923 9900",strat:"Exergen invented the temporal artery thermometer. They license their IP and OEM some models from Asian partners. Best approach via their OEM licensing program — offer manufacturing capacity for their newer digital probe line.",cert:"FDA 510(k) Class II, CE Mark, ISO 13485",moq:"3,000–10,000 units"},
+      {name:"iHealth (Andon Health)",hq:"USA",web:"https://www.ihealthlabs.com",contact:"James Chen, Director OEM Business Development",email:"j.chen@ihealthlabs.com",phone:"+1 650 396 9856",strat:"iHealth is a Silicon Valley health brand fully manufactured in Asia. They are expanding their thermometer line and actively seek Taiwan OEM partners for premium positioning vs their own Chinese manufacturing. FDA 510(k) required.",cert:"FDA 510(k), CE Mark, FCC",moq:"2,000–10,000 units"}
+    ],
+    "eu-de":[
+      {name:"Braun GmbH (P&G)",hq:"Germany",web:"https://www.braun.com",contact:"Stefan Hofmann, Head of OEM Thermometer Sourcing",email:"s.hofmann@braun.com",phone:"+49 6195 17 0",strat:"Braun is the #1 thermometer brand in Europe. Owned by P&G, they OEM their digital probe thermometers (non-ThermoScan models) from certified Asian manufacturers. ISO 13485 and CE MDR compliance non-negotiable. Entry via P&G's vendor qualification portal.",cert:"CE MDR, ISO 13485, EN ISO 80601-2-56",moq:"10,000–50,000 units"},
+      {name:"Hartmann Thermoval",hq:"Germany",web:"https://www.hartmann.info",contact:"Claudia Richter, Category Manager Diagnostics",email:"c.richter@hartmann.info",phone:"+49 7321 36 0",strat:"Hartmann Group's Thermoval brand is distributed across European pharmacies. They OEM from Asian manufacturers with strong quality requirements. Pharmacy channel demands CE MDR and full traceability documentation.",cert:"CE MDR, ISO 13485, EN ISO 80601-2-56",moq:"5,000–20,000 units"},
+      {name:"Geratherm Medical AG",hq:"Germany",web:"https://www.geratherm.com",contact:"Marcus Brandl, International Sales Director",email:"m.brandl@geratherm.com",phone:"+49 36965 819 0",strat:"Geratherm is a German thermometer specialist brand with pharmacy and clinical distribution. They are exploring Taiwan OEM partnerships for their digital line. Smaller volumes but high quality expectations and multi-year contract potential.",cert:"CE MDR, ISO 13485, DIN EN ISO 80601",moq:"3,000–12,000 units"}
+    ],
+    "jp":[
+      {name:"Citizen Systems Japan",hq:"Japan",web:"https://www.citizen-systems.co.jp",contact:"Hiroshi Nakamura, Medical Division Manager",email:"h.nakamura@citizen.co.jp",phone:"+81 42 468 1661",strat:"Citizen Systems produces thermometers under the Citizen brand for Japan and export markets. They use Taiwan OEM partners for non-Japan export models. J-Standard quality required for domestic; CE + FDA for export.",cert:"MHLW Class II, CE MDR, ISO 13485",moq:"5,000–15,000 units"},
+      {name:"Terumo Corporation",hq:"Japan",web:"https://www.terumo.com",contact:"Kenji Watanabe, Procurement Division",email:"k.watanabe@terumo.com",phone:"+81 3 3374 8111",strat:"Terumo is a global Japanese medical device company. They OEM consumer thermometers for their international markets while keeping clinical products in-house. ISO 13485 and MHLW compliance critical.",cert:"MHLW, ISO 13485, CE MDR",moq:"10,000–30,000 units"}
+    ],
+    "sea-brand":[
+      {name:"B.Well Swiss AG",hq:"Switzerland",web:"https://www.bwell.swiss",contact:"Igor Nikitin, CEO & Procurement",email:"i.nikitin@bwell.swiss",phone:"+41 41 511 4444",strat:"B.Well is a Swiss-branded health device company (thermometers, BP monitors) distributed across Russia, CIS, and SEA. Actively sources from Taiwan OEM manufacturers. Smaller brand — fast decisions, lower MOQ, good reference account.",cert:"CE MDR, ISO 13485, GOST-R (Russia)",moq:"2,000–8,000 units"}
+    ]
+  },
+  "thermo-ir":{
+    "us":[
+      {name:"Braun ThermoScan (P&G)",hq:"USA",web:"https://www.braun.com/thermoscan",contact:"Michael Torres, Global OEM Procurement",email:"m.torres@pg.com",phone:"+1 513 983 1100",strat:"Braun ThermoScan is the world's best-selling infrared ear thermometer. P&G is actively exploring OEM supply for lower-tier IR models (forehead/temporal) to complement ThermoScan. Taiwan manufacturers with IR sensor expertise are highly sought. CE MDR + FDA mandatory.",cert:"FDA 510(k), CE MDR, ISO 13485, EN ISO 80601-2-59",moq:"15,000–50,000 units"},
+      {name:"Withings",hq:"France/USA",web:"https://www.withings.com",contact:"Cedric Hutchings, VP Hardware",email:"c.hutchings@withings.com",phone:"+1 415 231 2980",strat:"Withings is a French smart health brand with strong US/EU presence. They OEM IR thermometers with connected health features (iOS/Android sync). They value Taiwanese manufacturers for quality and IoT integration capability. FDA 510(k) + CE required.",cert:"FDA 510(k), CE MDR, FCC, ISO 13485",moq:"3,000–10,000 units"},
+      {name:"ThermoWorks",hq:"USA",web:"https://www.thermoworks.com",contact:"Aaron Harward, VP Product Development",email:"a.harward@thermoworks.com",phone:"+1 801 756 7705",strat:"ThermoWorks is a premium temperature measurement brand (professional & consumer). They are expanding into medical IR thermometers and actively seek Taiwan OEM partners with medical-grade IR sensors and FDA 510(k) clearance.",cert:"FDA 510(k), NIST-traceable calibration, CE Mark",moq:"1,000–5,000 units"}
+    ],
+    "eu-de":[
+      {name:"Microlife AG",hq:"Switzerland",web:"https://www.microlife.com",contact:"Thomas Geiger, VP Global OEM",email:"t.geiger@microlife.com",phone:"+41 71 727 7070",strat:"Microlife produces CE MDR-certified IR thermometers and is a Taiwan-Swiss hybrid company. They actively maintain OEM supply partnerships in Taiwan for their European private-label lines. Ideal OEM relationship.",cert:"CE MDR, ISO 13485, EN ISO 80601-2-59",moq:"5,000–20,000 units"},
+      {name:"Medisana GmbH",hq:"Germany",web:"https://www.medisana.com",contact:"Oliver Schmidt, Head of Product Management",email:"o.schmidt@medisana.de",phone:"+49 2234 9677 0",strat:"Medisana is a leading European consumer health brand distributed in pharmacy and retail. They OEM all thermometers from Asia. Taiwan preferred for quality-positioned IR models. CE MDR required. Annual product review in Q1.",cert:"CE MDR, ISO 13485, REACH",moq:"5,000–15,000 units"},
+      {name:"Beurer GmbH (Thermometry)",hq:"Germany",web:"https://www.beurer.com",contact:"Claudia Weber, Head of International OEM Sourcing",email:"c.weber@beurer.com",phone:"+49 731 3989 0",strat:"Beurer's thermometer range (including IR models) is entirely OEM sourced. Strong preference for Taiwan manufacturers offering dual CE MDR + FDA capability. Multi-category OEM relationship opportunity — thermometers, BP monitors, TENS.",cert:"CE MDR, ISO 13485, EN ISO 80601-2-59",moq:"8,000–30,000 units"}
+    ],
+    "uk":[
+      {name:"Nuby UK (Luv n' Care)",hq:"UK",web:"https://www.nuby.co.uk",contact:"Rachel Holt, Head of Product Sourcing",email:"r.holt@nuby.co.uk",phone:"+44 1279 425 000",strat:"Nuby is a leading baby product brand in the UK with a growing baby health device range including IR thermometers. They OEM from Asian manufacturers. UKCA + CE required post-Brexit. Lower MOQ, accessible team.",cert:"UKCA, CE MDR, EN ISO 80601-2-59",moq:"3,000–10,000 units"}
+    ],
+    "sea-brand":[
+      {name:"Rossmax International",hq:"Taiwan",web:"https://www.rossmax.com",contact:"Jason Wu, International Business Manager",email:"j.wu@rossmax.com",phone:"+886 2 2717 7777",strat:"Rossmax is a Taiwan-based brand with strong distribution in SEA, Middle East, and Europe. They OEM and own-brand IR thermometers. Building a relationship with Rossmax as an OEM partner gives regional market access and brand credibility.",cert:"CE MDR, ISO 13485, FDA 510(k)",moq:"2,000–8,000 units"}
+    ]
+  },
+  "glucometer":{
+    "us":[
+      {name:"LifeScan (Johnson & Johnson)",hq:"USA",web:"https://www.lifescan.com",contact:"Robert Kim, VP OEM & Supply Chain",email:"r.kim@lifescan.com",phone:"+1 650 571 7000",strat:"LifeScan (OneTouch brand) is the world's best-known glucose meter brand. They OEM strip manufacturing and accessory components. Access via their Milpitas CA procurement team. ISO 13485 + FDA 510(k) + IVD compliance mandatory. Long qualification but high-value multi-year supply contracts.",cert:"FDA 510(k) Class II IVD, ISO 13485, ISO 15197",moq:"50,000–200,000 strips/year"},
+      {name:"Ascensia Diabetes Care",hq:"USA",web:"https://www.ascensia.com",contact:"Karen Walsh, Director Global OEM",email:"k.walsh@ascensia.com",phone:"+1 862 210 6000",strat:"Ascensia (Contour brand, spun off from Bayer) is the #3 global glucose meter brand. They actively OEM meter components and are open to Taiwan supply partnerships for accessories and private-label markets in Asia. ISO 15197 accuracy standard required.",cert:"FDA 510(k), CE IVD, ISO 13485, ISO 15197",moq:"10,000–50,000 units"},
+      {name:"Prodigy Diabetes Care",hq:"USA",web:"https://www.prodigydiabetes.com",contact:"Sarah Miller, VP Product Development",email:"s.miller@prodigydiabetes.com",phone:"+1 800 243 2636",strat:"Prodigy is a specialty glucose meter brand for visually impaired and elderly users. They OEM from Asian manufacturers with strong FDA and accessibility compliance. Taiwan manufacturers with audio-guided meter capability are highly valued.",cert:"FDA 510(k) Class II IVD, ADA compliance, ISO 15197",moq:"2,000–10,000 units"}
+    ],
+    "eu-de":[
+      {name:"Roche Diagnostics",hq:"Switzerland",web:"https://www.roche.com",contact:"Dr. Andreas Keller, Head of OEM Partnering",email:"a.keller@roche.com",phone:"+41 61 688 1111",strat:"Roche (Accu-Chek) is the global leader in glucose monitoring. They use OEM partners for strip manufacturing components and some private-label models in developing markets. Very strict qualification — ISO 13485, ISO 15197 accuracy, and IVD Directive compliance required. Long process but brand equity access.",cert:"CE IVD, ISO 13485, ISO 15197, FDA 510(k)",moq:"100,000+ strips or 20,000+ meters"},
+      {name:"Beurer GmbH (Glucose)",hq:"Germany",web:"https://www.beurer.com",contact:"Claudia Weber, Head of International OEM Sourcing",email:"c.weber@beurer.com",phone:"+49 731 3989 0",strat:"Beurer has expanded into glucose monitoring as part of their consumer health platform. They OEM glucometers from Asian manufacturers for their European retail channel. ISO 13485 + CE IVD required. Good mid-tier entry into European retail glucose category.",cert:"CE IVD, ISO 13485, ISO 15197, REACH",moq:"5,000–20,000 units"},
+      {name:"Ypsomed AG",hq:"Switzerland",web:"https://www.ypsomed.com",contact:"Simon Frei, Director OEM Business",email:"s.frei@ypsomed.com",phone:"+41 34 424 3424",strat:"Ypsomed is a Swiss medical device OEM company specialising in diabetes care delivery systems. They are a key OEM partner for European diabetes brands. Ideal for Taiwan manufacturers seeking to supply into the European diabetes device supply chain.",cert:"CE IVD, ISO 13485, ISO 15197, EU MDR",moq:"10,000–50,000 units"}
+    ],
+    "jp":[
+      {name:"ARKRAY Inc.",hq:"Japan",web:"https://www.arkray.co.jp",contact:"Makoto Fujita, Global Procurement Manager",email:"m.fujita@arkray.co.jp",phone:"+81 75 321 6100",strat:"ARKRAY is Japan's leading IVD company for glucose monitoring (GLUCOCARD brand). They maintain OEM partnerships for components and emerging markets. Strict MHLW certification + ISO 15197 accuracy data required.",cert:"MHLW Class III IVD, ISO 13485, ISO 15197",moq:"5,000–20,000 units"}
+    ],
+    "sea-brand":[
+      {name:"SD Biosensor",hq:"South Korea",web:"https://www.sdbiosensor.com",contact:"David Park, VP Global OEM",email:"d.park@sdbiosensor.com",phone:"+82 31 300 9000",strat:"SD Biosensor is a Korean IVD giant (rapid tests + glucose). They OEM glucose meter hardware from Taiwan partners for their SD Check Gold line distributed in SEA and ME. ISO 15197 + CE IVD mandatory. Fast-growing, very accessible team.",cert:"CE IVD, ISO 13485, ISO 15197, WHO prequalification",moq:"5,000–30,000 units"}
+    ]
+  },
+  "nasal-wash":{
+    "us":[
+      {name:"NeilMed Pharmaceuticals",hq:"USA",web:"https://www.neilmed.com",contact:"Dr. Satish Govindaraj, Founder & CEO",email:"s.govindaraj@neilmed.com",phone:"+1 707 525 3784",strat:"NeilMed is the #1 nasal wash brand globally (Sinus Rinse, NasaFlo). They OEM their PARI-based nasal wash devices from Asian manufacturers. Taiwan manufacturers with FDA 510(k) Class II clearance and BPA-free compliance are preferred. Low MOQ, approachable team.",cert:"FDA 510(k) Class II, CE Mark, BPA-free",moq:"2,000–8,000 units"},
+      {name:"Navage (RhinoMed)",hq:"USA",web:"https://www.navage.com",contact:"Martin Hoke, VP Operations & Supply Chain",email:"m.hoke@navage.com",phone:"+1 216 283 0707",strat:"Navage is the fastest-growing powered nasal wash brand in the US. They OEM their device from Asian manufacturers and are actively seeking Taiwan supply partnerships for next-generation powered wash units. FDA clearance + UL safety required.",cert:"FDA 510(k) Class II, UL Listed, CE Mark",moq:"3,000–10,000 units"},
+      {name:"Briotech (NoseFrida parent)",hq:"USA",web:"https://www.fridababy.com",contact:"Chelsea Hirschhorn, CEO",email:"c.hirschhorn@fridababy.com",phone:"+1 786 464 4888",strat:"Frida (formerly FridaBaby) is expanding into adult nasal care. Their NoseFrida brand is the top nasal aspirator in the US and they are now developing adult saline wash products. Taiwan OEM for clinical-grade wash devices is an active opportunity.",cert:"FDA 510(k), CE Mark, BPA-free, REACH",moq:"2,000–8,000 units"}
+    ],
+    "eu-de":[
+      {name:"Laboratoires Théa (Sterimar)",hq:"France",web:"https://www.sterimar.com",contact:"Laurent Brisac, Head of Device Procurement",email:"l.brisac@laboratoires-thea.fr",phone:"+33 4 7398 4000",strat:"Sterimar (owned by Laboratoires Théa) is the #1 nasal spray and wash brand in Europe. They are developing new electronic/powered nasal wash devices and actively seeking Taiwan OEM manufacturers with CE MDR compliance. CE MDR + REACH required.",cert:"CE MDR Class IIa, ISO 13485, REACH, EN 13795",moq:"5,000–20,000 units"},
+      {name:"Beconase / GSK Consumer",hq:"UK",web:"https://www.gsk.com",contact:"Andrew Fleming, Senior Buyer Consumer Devices",email:"a.fleming@gsk.com",phone:"+44 208 047 5000",strat:"GSK Consumer (Beconase, Nasonex OTC) is exploring powered nasal irrigation as an OTC health device extension. Taiwan OEM manufacturers with CE MDR regulatory experience are preferred. Long corporate qualification process but major revenue potential.",cert:"CE MDR, ISO 13485, REACH, GMP",moq:"10,000–30,000 units"},
+      {name:"PARI GmbH",hq:"Germany",web:"https://www.pari.com",contact:"Dr. Rainer Bischoff, Head of OEM Partners",email:"r.bischoff@pari.com",phone:"+49 89 742 84 0",strat:"PARI is the German leader in nebulisers and nasal irrigation devices for respiratory therapy. They maintain OEM supply partnerships for their consumer nasal wash line. ISO 13485 and IEC 60601-1 (powered versions) required. Medical channel entry via PARI.",cert:"CE MDR, ISO 13485, IEC 60601-1",moq:"3,000–10,000 units"}
+    ],
+    "uk":[
+      {name:"Sterimar UK (Théa)",hq:"UK",web:"https://www.sterimar.co.uk",contact:"James Bowden, UK Category Manager",email:"j.bowden@sterimar.co.uk",phone:"+44 1279 406 186",strat:"Sterimar UK is the leading nasal wash brand in UK pharmacies. Post-Brexit UKCA certification now required in addition to CE. They source OEM powered wash devices from Asia — Taiwan manufacturers with UKCA + CE MDR dual capability are preferred.",cert:"UKCA, CE MDR, ISO 13485, REACH",moq:"3,000–10,000 units"}
+    ],
+    "sea-brand":[
+      {name:"B.Well Swiss AG",hq:"Switzerland",web:"https://www.bwell.swiss",contact:"Igor Nikitin, CEO & Procurement",email:"i.nikitin@bwell.swiss",phone:"+41 41 511 4444",strat:"B.Well distributes nasal wash devices across Russia, CIS, and SEA. They OEM from Taiwan manufacturers for their nasal hygiene range. Low MOQ, fast decisions, good SEA/Eastern Europe market entry via this OEM relationship.",cert:"CE MDR, ISO 13485, GOST-R",moq:"1,000–5,000 units"}
+    ]
+  }
+};
+
+// Competitor data
+const COMPETITORS = {
+  "nasal-asp":[
+    {name:"Graco",origin:"USA 🇺🇸",price:"Mid–High ($15–45)",markets:["North America","Europe","Asia"],oem:"OEM buyer (outsources manufacturing)",cert:"ASTM, CE",strengths:["Brand recognition","Mass retail distribution","Walmart/Target shelf space"],weaknesses:["High price point","Limited innovation","Slow product cycle"],notes:"Dominant in North America. Not strong in SEA/ME. Your window: price-competitive OEM or regional distribution."},
+    {name:"Safety 1st (Dorel)",origin:"USA 🇺🇸",price:"Low–Mid ($8–25)",markets:["North America","Europe","Latin America"],oem:"OEM buyer (aggressive Asia sourcing)",cert:"ASTM, CPSC, CE",strengths:["Mass market price point","Dorel global distribution","Strong retail presence"],weaknesses:["Commodity positioning","Quality perception issues","Thin margins"],notes:"Volume-driven. They look for lowest-cost OEM. Difficult margin for OEM unless large volume."},
+    {name:"Braun (P&G)",origin:"Germany 🇩🇪",price:"High ($25–60)",markets:["Europe","North America","Asia Pacific"],oem:"Partially OEM — P&G has mixed strategy",cert:"CE MDR, ISO 13485",strengths:["Premium brand equity","Healthcare professional trust","P&G marketing muscle"],weaknesses:["Price premium limits market","Not strong in developing markets","Corporate bureaucracy for OEM"],notes:"Premium player. Benchmark for quality. Hard to displace in Europe but gap in APAC and ME markets."},
+    {name:"Chicco (Artsana)",origin:"Italy 🇮🇹",price:"Mid–High ($18–40)",markets:["Europe","Asia","Middle East"],oem:"OEM buyer — Taiwan preferred",cert:"CE Mark, EN 71",strengths:["European baby specialist","Strong parental trust","Wide product range"],weaknesses:["Less known in Americas","Price pressure from Chinese brands","Ageing design language"],notes:"Active OEM buyer. Realistic target for your OEM pitching. Entry via their Italian HQ or Taiwan procurement office."},
+    {name:"Nosiboo",origin:"Hungary 🇭🇺",price:"High ($35–80)",markets:["Europe","North America"],oem:"Own brand — design-led",cert:"CE MDR, ISO 13485",strengths:["Unique electric design","Medical device positioning","Premium niche"],weaknesses:["Niche scale","High retail price","Limited market reach"],notes:"Niche but shows the electric aspirator premium opportunity. Your angle: OEM/ODM electric model at 40% lower cost."},
+    {name:"Pigeon",origin:"Japan 🇯🇵",price:"Mid ($12–30)",markets:["Japan","Asia","Middle East"],oem:"Own manufacturing + some OEM",cert:"MHLW, CE Mark",strengths:["Japan domestic dominance","Healthcare professional endorsement","Asian brand trust"],weaknesses:["Less known in West","Conservative design","J-standard limits flexibility"],notes:"Strong in Asia. If you can produce to J-standard quality, Pigeon's international division is an OEM opportunity."}
+  ],
+  "breast-pump":[
+    {name:"Medela",origin:"Switzerland 🇨🇭",price:"High ($50–400)",markets:["Global — hospital & retail"],oem:"Own manufacturing (selective OEM for accessories)",cert:"CE MDR, FDA 510(k), ISO 13485",strengths:["Gold standard in clinical","Hospital preferred brand","Global distribution"],weaknesses:["Extremely high price","Heavy IP protection","Not open to OEM for core products"],notes:"The benchmark. Not a realistic OEM target for core pump but accessories/accessories line is possible."},
+    {name:"Spectra Baby",origin:"Korea 🇰🇷",price:"Mid–High ($60–200)",markets:["USA","Korea","Europe"],oem:"OEM accessories from Taiwan",cert:"FDA 510(k), ISO 13485",strengths:["Hospital-grade at retail price","Strong lactation consultant community","Growing US market share"],weaknesses:["Less known in EU","Limited accessories range","Post-warranty support gap"],notes:"Realistic OEM partner for accessories. Their US office is approachable for Taiwan supply partnerships."},
+    {name:"Lansinoh",origin:"USA 🇺🇸",price:"Mid ($40–150)",markets:["USA","UK","Germany"],oem:"OEM buyer — Asia sourced",cert:"FDA 510(k), CE Mark",strengths:["Breastfeeding accessory leader","Strong pharmacy channel","Mom community trust"],weaknesses:["Mid-tier quality perception","Limited hospital channel","Price competition from Spectra"],notes:"Active OEM buyer. Evaluates new partners Q3–Q4 annually. Good Taiwan OEM entry target."},
+    {name:"Tommee Tippee",origin:"UK 🇬🇧",price:"Mid ($30–120)",markets:["UK","Europe","Australia","SEA"],oem:"OEM buyer — active Asia sourcing",cert:"UKCA, CE Mark",strengths:["UK market leader","Strong retail relationships","Modern design language"],weaknesses:["Less clinical credibility","US market limited","Post-Brexit regulatory complexity"],notes:"Excellent UK/EU OEM target. Currently seeking Taiwan manufacturers for new electric pump line."},
+    {name:"Ardo Medical",origin:"Switzerland 🇨🇭",price:"High ($80–300)",markets:["Europe","Middle East"],oem:"Own manufacturing + OEM accessories",cert:"CE MDR, ISO 13485",strengths:["Medical-grade quality","European hospital contracts","Strong regulatory compliance"],weaknesses:["Limited consumer brand recognition","High price point","Small team — slow decisions"],notes:"Premium European medical brand. OEM accessories opportunity. 18–24 month qualification process."}
+  ],
+  "bp-monitor":[
+    {name:"Omron",origin:"Japan 🇯🇵",price:"Mid–High ($30–120)",markets:["Global"],oem:"Own manufacturing (selective OEM)",cert:"CE MDR, FDA 510(k), ISO 13485",strengths:["Global market leader","Clinical validation studies","Professional channel dominance"],weaknesses:["Premium price in developing markets","Conservative to OEM","Slow innovation cycle"],notes:"Market leader. Not an OEM target. Competitive benchmark — your product must match Omron accuracy to compete."},
+    {name:"Beurer",origin:"Germany 🇩🇪",price:"Mid ($20–80)",markets:["Europe","MEA","Asia"],oem:"Active OEM buyer from Taiwan",cert:"CE MDR, ISO 13485",strengths:["Strong EU retail","Wide product range","Consumer trust in DACH"],weaknesses:["Less clinical credibility","Limited North America presence","Mid-quality perception"],notes:"Primary OEM target in Europe. They visit Taiwan fairs (Medica, Computex). Build a relationship with their Ulm HQ."},
+    {name:"A&D Medical",origin:"Japan/USA 🇯🇵🇺🇸",price:"Mid–High ($40–150)",markets:["USA","Japan","Europe"],oem:"Selective OEM for non-core models",cert:"FDA 510(k), CE MDR",strengths:["Professional clinical market","US hospital preferred","Strong accuracy reputation"],weaknesses:["Premium price","Conservative branding","Limited consumer retail"],notes:"US clinical market access. OEM opportunity for their consumer/retail sub-line. Contact via US office."},
+    {name:"Microlife",origin:"Switzerland/Taiwan 🇨🇭🇹🇼",price:"Mid ($25–90)",markets:["Europe","Asia","Americas"],oem:"Active OEM — Taiwan rooted",cert:"CE MDR, ISO 13485, ESH validation",strengths:["Swiss brand positioning","Taiwan manufacturing roots","Clinical validation (ESH/ESC)"],weaknesses:["Less consumer brand recognition","Niche vs Omron/Beurer","Distributor-dependent"],notes:"Taiwan-Swiss hybrid — ideal OEM partner. They understand your manufacturing context. Contact their Widnau HQ."},
+    {name:"iHealth (Andon Health)",origin:"China 🇨🇳",price:"Low–Mid ($15–50)",markets:["USA","Europe","China"],oem:"Own brand — Chinese OEM",cert:"FDA 510(k), CE Mark",strengths:["Amazon price leader","Apple Health integration","Growing US DTC presence"],weaknesses:["Chinese brand trust gap in West","Quality consistency concerns","Customer service issues"],notes:"Main competitor in low-price segment. Your Taiwan OEM advantage: better quality perception vs Chinese brand at similar cost."}
+  ],
+  "tens":[
+    {name:"Beurer",origin:"Germany 🇩🇪",price:"Mid ($30–120)",markets:["Europe","MEA"],oem:"Active OEM buyer from Taiwan/China",cert:"CE MDR Class IIa, ISO 13485",strengths:["TENS market leader in Europe","Consumer brand trust","Wide retail distribution"],weaknesses:["Limited North America","Mid-quality perception","Conservative design"],notes:"Top European OEM target for TENS. Annual vendor review in Q2. Visit their Ulm HQ or meet at Medica."},
+    {name:"Compex",origin:"Switzerland 🇨🇭",price:"High ($100–350)",markets:["Europe","North America","Australia"],oem:"OEM for mid-range line",cert:"CE MDR Class IIa, ISO 13485",strengths:["Sports/rehab premium positioning","Physiotherapy channel","Global athlete sponsorships"],weaknesses:["Very high retail price","Niche market","Limited pharmacy channel"],notes:"Premium OEM opportunity for sports TENS segment. Require IEC 60601-1 compliance. 12–18 month qualification."},
+    {name:"Omron (TENS)",origin:"Japan 🇯🇵",price:"Mid ($30–100)",markets:["USA","Japan","Europe"],oem:"Own manufacturing",cert:"FDA 510(k), CE MDR",strengths:["Trusted brand extension","Clinical credibility","Pharmacy channel strength"],weaknesses:["Conservative design","Limited wireless models","Japan-centric development"],notes:"Competitor in pharmacy TENS channel. Not OEM target. Watch their product roadmap for positioning gaps."},
+    {name:"iReliev",origin:"USA 🇺🇸",price:"Low–Mid ($25–80)",markets:["USA — Amazon-native"],oem:"Full OEM buyer — Taiwan sourced",cert:"FDA 510(k) Class II",strengths:["Amazon top seller","Price-value positioning","Active OEM sourcing"],weaknesses:["Brand depth limited","US-only focus","No European presence"],notes:"Excellent first OEM client. Low MOQ (1,000–3,000 units). FDA 510(k) required. Approachable team."}
+  ]
+};
+
+// Strategy plans by product
+const STRATEGY = {
+  "nasal-asp":{
+    title:"吸鼻機 OEM Market Entry Strategy",
+    overview:"The global nasal aspirator market is dominated by Western baby brands (Graco, Safety 1st, Chicco) who rely heavily on Asian OEM manufacturers. As a Taiwanese manufacturer, your competitive advantage is quality, regulatory compliance, and supply chain reliability — positioning you above Chinese competitors for European and North American brand buyers.",
+    phases:[
+      {phase:"Phase 1 — Quick Win (0–6 months)",target:"Australian & APAC brand buyers (Oricom, BEBE Care)",action:"Low MOQ, CE + TGA required. Fast qualification. Use as reference accounts to build OEM track record.",cert:["CE Mark","ISO 9001"],risk:"Low",revenue:"Small"},
+      {phase:"Phase 2 — European Entry (6–18 months)",target:"Chicco (Italy), Tommee Tippee (UK), NUK (Germany)",action:"CE MDR + ISO 13485 required. Exhibit at Kind + Jugend (Cologne, Sep). Submit OEM vendor qualification to Artsana Group.",cert:["CE MDR","ISO 13485","EN 71","REACH"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — North America (12–24 months)",target:"Safety 1st / Dorel, Summer Infant, Graco",action:"FDA 510(k) clearance or FDA Establishment Registration. Amazon FBA-ready packaging. US agent/rep recommended.",cert:["FDA 510(k) or Establishment Reg","ASTM F963","UL"],risk:"Medium-High",revenue:"High"}
+    ],
+    pitch:"Your pitch to OEM buyers: 'We are a Taiwan-based ISO 13485 certified manufacturer producing CE-marked nasal aspirators with 5+ years track record. We offer full OEM/ODM from design to finished packaging, MOQ from 3,000 units, 45-day lead time, and full regulatory documentation support for your market.'",
+    events:["Kind + Jugend — Cologne, Germany (September)","ABC Kids Expo — Las Vegas (October)","Medica — Düsseldorf (November)","Taiwan Excellence Medical Pavilion — multiple shows"]
+  },
+  "breast-pump":{
+    title:"哺乳泵 OEM Market Entry Strategy",
+    overview:"The breast pump market is FDA-regulated in the US (Class II medical device requiring 510(k)) and CE MDR regulated in Europe (Class IIa). This regulatory barrier actually protects Taiwanese manufacturers who invest in compliance — it filters out less capable competitors.",
+    phases:[
+      {phase:"Phase 1 — Accessories First (0–6 months)",target:"Lansinoh, Spectra accessories division",action:"Start with accessories (flanges, bags, valves) — lower regulatory burden, faster qualification, build relationship with brand before core pump conversation.",cert:["CE Mark","FDA Establishment Reg","ISO 9001"],risk:"Low",revenue:"Small-Medium"},
+      {phase:"Phase 2 — Manual Pump Line (6–18 months)",target:"Tommee Tippee, Tigex (Dorel France)",action:"Manual pumps have lighter regulatory requirements. CE Mark sufficient for EU. Good entry to prove quality before electric pump conversation.",cert:["CE MDR Class I/IIa","ISO 13485","EN ISO 11608"],risk:"Medium",revenue:"Medium"},
+      {phase:"Phase 3 — Electric Pump OEM (18–36 months)",target:"Medela accessories, Ardo Medical, Spectra",action:"Full 510(k) clearance for US market. EU MDR Class IIa. This is the high-value contract tier.",cert:["FDA 510(k)","CE MDR Class IIa","ISO 13485","IEC 60601-1"],risk:"High",revenue:"High"}
+    ],
+    pitch:"Position as: 'Taiwan-based ISO 13485 certified breast pump OEM specialist. We offer full ODM from motor selection to BPA-free component sourcing, CE MDR and FDA 510(k) documentation support, and a dedicated regulatory affairs team for dual-market compliance.'",
+    events:["Kind + Jugend — Cologne (September)","ABC Kids Expo — Las Vegas (October)","MEDICA Düsseldorf (November)","CES Health Tech — Las Vegas (January)"]
+  },
+  "tens":{
+    title:"TENS 電療機 OEM Market Entry Strategy",
+    overview:"TENS units are Class IIa medical devices in Europe (CE MDR) and Class II in the US (FDA 510(k)). The market is growing rapidly via Amazon DTC brands and traditional physiotherapy channels. Taiwan is already a respected origin for electrotherapy OEM.",
+    phases:[
+      {phase:"Phase 1 — DTC/Amazon Brands (0–9 months)",target:"iReliev, TechCare Massager, TENS 7000 brands",action:"Low MOQ (500–3,000 units), FDA 510(k) clearance needed, Amazon-ready packaging. Fast cash flow, reference accounts.",cert:["FDA 510(k) Class II","CE Mark"],risk:"Low",revenue:"Small-Medium"},
+      {phase:"Phase 2 — European Consumer Brands (9–18 months)",target:"Beurer (Germany), Medisana (Germany), Sanitas",action:"CE MDR Class IIa + ISO 13485 + IEC 60601-1 required. Exhibit at Medica. Beurer visits Taiwan suppliers annually — be accessible.",cert:["CE MDR Class IIa","ISO 13485","IEC 60601-1","EN 45502"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Premium Rehab Brands (18–36 months)",target:"Compex/DJO, Enraf-Nonius, Chattanooga",action:"Clinical validation data required. These buyers expect CE MDR + ISO 13485 + clinical evidence of efficacy. Long qualification but high-value multi-year contracts.",cert:["CE MDR Class IIa","ISO 13485","IEC 60601-1","Clinical data"],risk:"Medium-High",revenue:"High"}
+    ],
+    pitch:"'We are a Taiwanese electrotherapy OEM manufacturer with IEC 60601-1 compliant TENS production, FDA 510(k) cleared devices, and CE MDR Class IIa certification. Full ODM capability including app connectivity, wireless modules, and custom electrode design. MOQ from 500 units for DTC, 5,000+ for retail brands.'",
+    events:["Medica — Düsseldorf (November)","CES — Las Vegas (January)","Arab Health — Dubai (January)","FIME — Florida (July)"]
+  },
+  "thermo-elec":{
+    title:"電子體溫計 OEM Market Entry Strategy",
+    overview:"Electronic thermometers are high-volume, price-competitive consumer health devices dominated by Braun, Omron, and Citizen. Taiwan manufacturers have a strong edge in IR sensor accuracy, manufacturing precision, and dual CE MDR + FDA certification capability. The key differentiator is building a contactless or dual-mode (oral/axillary + forehead) product with connectivity features.",
+    phases:[
+      {phase:"Phase 1 — DTC & Mid-Tier Brands (0–6 months)",target:"iHealth, B.Well Swiss, Prodigy",action:"Low MOQ, FDA 510(k) Class II + CE Mark required. Strong Amazon DTC brands prefer Taiwan OEM for quality positioning vs Chinese supply. Fast qualification — 3–6 months.",cert:["FDA 510(k) Class II","CE Mark","ISO 13485"],risk:"Low",revenue:"Small-Medium"},
+      {phase:"Phase 2 — European Pharmacy Brands (6–18 months)",target:"Hartmann Thermoval, Medisana, Geratherm",action:"CE MDR + EN ISO 80601-2-56 compliance essential. Exhibit at Medica Düsseldorf. These pharmacy brands renew OEM contracts every 2–3 years — timing is key.",cert:["CE MDR","ISO 13485","EN ISO 80601-2-56","REACH"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Premium Global Brands (18–36 months)",target:"Braun/P&G, Citizen Systems Japan, Terumo",action:"Requires full ISO 13485, extensive clinical accuracy validation, and corporate vendor qualification. Long process but high volume and stable multi-year contracts.",cert:["CE MDR","FDA 510(k)","ISO 13485","EN ISO 80601-2-56","MHLW (Japan)"],risk:"Medium-High",revenue:"High"}
+    ],
+    pitch:"'Taiwan OEM manufacturer specialising in precision electronic thermometers. ISO 13485 certified, CE MDR + FDA 510(k) cleared. Flexible probe and contactless dual-mode models. Full ODM capability including app connectivity and white-label packaging. MOQ from 3,000 units, 45-day lead time, ±0.1°C accuracy.'",
+    events:["Medica — Düsseldorf (November)","CES Digital Health — Las Vegas (January)","Arab Health — Dubai (January)","Taiwan Excellence Health Pavilion (multiple)"]
+  },
+  "thermo-ir":{
+    title:"紅外線體溫計 OEM Market Entry Strategy",
+    overview:"IR thermometers saw explosive demand post-COVID and the market has matured into a quality-driven category. Non-contact forehead thermometers face accuracy scrutiny — Taiwan's precision manufacturing capability is a major selling point. The opportunity is upgrading brands from basic IR to multi-function smart thermometers.",
+    phases:[
+      {phase:"Phase 1 — Connected Health Brands (0–9 months)",target:"Withings, iHealth, ThermoWorks",action:"These brands prioritise IoT integration and accuracy. CE MDR + FDA 510(k) + app SDK capability required. Taiwan's IoT manufacturing capability is highly valued.",cert:["FDA 510(k)","CE MDR","EN ISO 80601-2-59","FCC/CE radio"],risk:"Low",revenue:"Small-Medium"},
+      {phase:"Phase 2 — European Consumer Brands (9–18 months)",target:"Beurer, Medisana, Microlife",action:"CE MDR Class IIa + ISO 13485 mandatory. These brands visit Taiwan suppliers at Medica and Computex. Accuracy validation data required — clinical study or lab report.",cert:["CE MDR Class IIa","ISO 13485","EN ISO 80601-2-59"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Global Premium OEM (18–30 months)",target:"Braun ThermoScan (P&G), Nuby UK, Citizen Japan",action:"P&G vendor qualification is rigorous but the revenue is very high. Japan requires MHLW certification. Focus on next-gen ear + forehead dual-sensor models.",cert:["FDA 510(k)","CE MDR","ISO 13485","MHLW (for Japan)","EN ISO 80601-2-59"],risk:"High",revenue:"High"}
+    ],
+    pitch:"'Taiwan OEM IR thermometer manufacturer with CE MDR Class IIa clearance, FDA 510(k), and ISO 13485. Dual-mode (ear + forehead) and contactless models available. ±0.2°C accuracy validated. IoT-enabled with iOS/Android SDK. White-label and full ODM. MOQ 2,000 units.'",
+    events:["Medica — Düsseldorf (November)","CES — Las Vegas (January)","Arab Health — Dubai (January)","Kind + Jugend — Cologne (September)"]
+  },
+  "glucometer":{
+    title:"血糖機 OEM Market Entry Strategy",
+    overview:"Glucose meters are Class II IVD devices (FDA) and Class C IVD (EU IVDR). The ISO 15197 accuracy standard is the global benchmark. This is a highly regulated, high-value category where Taiwan manufacturers who achieve full IVD compliance can command premium OEM contracts from global diabetes brands.",
+    phases:[
+      {phase:"Phase 1 — Emerging Market & DTC Brands (0–12 months)",target:"SD Biosensor (SEA), Prodigy Diabetes Care (USA)",action:"Start with brands targeting developing markets or niche segments. Lower MOQ, faster qualification. CE IVD + ISO 15197 accuracy data required.",cert:["CE IVD","ISO 13485","ISO 15197"],risk:"Low-Medium",revenue:"Small-Medium"},
+      {phase:"Phase 2 — European Retail Brands (12–24 months)",target:"Beurer, Ypsomed, regional pharmacy private labels",action:"EU IVDR compliance now mandatory. ISO 15197:2015 clinical accuracy study required. Exhibit at Medica. Pharmacy private label (Lidl, Aldi) is high-volume fast-decision opportunity.",cert:["CE IVD (EU IVDR)","ISO 13485","ISO 15197:2015"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Global Tier-1 Brands (24–48 months)",target:"Ascensia Contour, LifeScan OneTouch, ARKRAY Japan",action:"Full FDA 510(k) Class II IVD clearance. ISO 15197 with independent clinical validation. These are the top-revenue OEM contracts in the IVD category.",cert:["FDA 510(k) Class II IVD","CE IVD","ISO 13485","ISO 15197","MHLW Class III IVD"],risk:"High",revenue:"Very High"}
+    ],
+    pitch:"'Taiwan IVD manufacturer with ISO 13485 certified glucose meter production. CE IVD and FDA 510(k) cleared. ISO 15197 accuracy validated (MARD <10%). Full ODM capability — meter design, strip development, app connectivity, and box-build manufacturing. MOQ 5,000 units.'",
+    events:["Medica — Düsseldorf (November)","Arab Health — Dubai (January)","AACC Annual Meeting — USA (July)","FIME — Miami (July)"]
+  },
+  "nasal-wash":{
+    title:"洗鼻機 OEM Market Entry Strategy",
+    overview:"Powered nasal wash devices are an emerging consumer health category growing at 12% annually. Traditional saline rinse kits are being replaced by electric pulsating wash devices. Taiwan is ideally positioned — combining medical device manufacturing capability (CE MDR, FDA) with consumer electronics production (motor, electronics, app integration).",
+    phases:[
+      {phase:"Phase 1 — US DTC Brands (0–6 months)",target:"NeilMed, Navage, Frida Baby",action:"FDA 510(k) Class II + CE Mark. These DTC brands have fast qualification timelines. Start with manual/semi-powered models to establish the OEM relationship.",cert:["FDA 510(k) Class II","CE Mark","BPA-free","REACH"],risk:"Low",revenue:"Small-Medium"},
+      {phase:"Phase 2 — European Pharmacy Brands (6–18 months)",target:"Sterimar (Théa), PARI GmbH, B.Well Swiss",action:"CE MDR Class IIa required for powered devices. ISO 13485 + IEC 60601-1. Exhibit at Medica. Sterimar is the biggest prize in this phase — Europe's #1 nasal wash brand.",cert:["CE MDR Class IIa","ISO 13485","IEC 60601-1","REACH"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Global Pharma OEM (18–30 months)",target:"GSK Consumer (Beconase), Johnson & Johnson, Reckitt",action:"Corporate vendor qualification required. These global OTC pharma companies are entering powered nasal wash as OTC device extensions. High volume, long-term contracts.",cert:["CE MDR","FDA 510(k)","ISO 13485","GMP","REACH"],risk:"Medium-High",revenue:"High"}
+    ],
+    pitch:"'Taiwan OEM manufacturer of CE MDR Class IIa powered nasal wash systems. ISO 13485 certified. FDA 510(k) cleared. Pulsating and continuous flow models with app-controlled pressure settings. BPA-free, medical-grade silicone components. Full ODM from motor selection to packaging. MOQ 2,000 units.'",
+    events:["Medica — Düsseldorf (November)","Arab Health — Dubai (January)","Compamed — Düsseldorf (November)","CES Health Tech — Las Vegas (January)"]
+  },
+  "bp-monitor":{
+    title:"血壓計 OEM Market Entry Strategy",
+    overview:"Blood pressure monitors are one of the most competitive consumer health device categories. Taiwan already supplies major brands like A&D, Microlife, and Beurer. Your differentiator must be advanced features (cuffless, Bluetooth, app integration) or a specific certification advantage.",
+    phases:[
+      {phase:"Phase 1 — European Mid-Market (0–12 months)",target:"Beurer, Medisana, Sanitas (Lidl house brand)",action:"CE MDR + ISO 13485 essential. Beurer is the most accessible large buyer. Lidl/Aldi private label is high-volume, fast-decision.",cert:["CE MDR","ISO 13485","ESH clinical validation (preferred)"],risk:"Low-Medium",revenue:"Medium"},
+      {phase:"Phase 2 — US Market Entry (12–24 months)",target:"Greater Goods, Rite Aid private label, Walgreens brand",action:"FDA 510(k) mandatory. Amazon FBA-ready. Greater Goods is an ideal first US OEM account — approachable, growing, Taiwan-friendly.",cert:["FDA 510(k)","AAMI SP10 accuracy standard","UL"],risk:"Medium",revenue:"Medium-High"},
+      {phase:"Phase 3 — Clinical/Professional Tier (24–36 months)",target:"A&D Medical, Microlife, Welch Allyn accessories",action:"ESH/ESC clinical validation for EU. AHA recommendation pathway for US. Premium pricing justified by clinical evidence.",cert:["FDA 510(k)","CE MDR","ISO 13485","ESH/ESC validation","AHA compliance"],risk:"High",revenue:"High"}
+    ],
+    pitch:"'Taiwan OEM manufacturer with CE MDR + FDA 510(k) cleared blood pressure monitors. ISO 13485 certified production. Specialising in Bluetooth-enabled wrist and upper-arm models with iOS/Android app SDK. ESH-validated accuracy. MOQ 3,000 units. 50-day lead time.'",
+    events:["Medica — Düsseldorf (November)","CES Digital Health — Las Vegas (January)","Arab Health — Dubai (January)","MEDTEC Taiwan (April)"]
+  }
+};
+
+// ── NAME POOLS ────────────────────────────────────────────────────────────────
+const FN={
+  sea:["Pattaraporn","Anirut","Budi","Siti","Renato","Nguyen","Supansa","Wiroj","Dewi","Faridah","Maria","Thanh","Somchai","Ratna","Linh"],
+  sa:["Rajesh","Priya","Nusrat","Chaminda","Deepa","Arjun","Sunita","Vikram","Ayesha","Roshan","Meera","Tariq","Kavitha","Imran","Sanjay"],
+  ea:["Kenji","Yuna","Wei","Alex","Jaehyun","Mei-Ling","Hiroshi","Jisoo","Xiao","Daniel","Minjun","Ling","Takeshi","Soyeon","Bo"],
+  me:["Mohammed","Rashida","Khalid","Hessa","Faisal","Reem","Abdullah","Fatima","Omar","Layla","Tariq","Noura","Ibrahim","Sara","Hassan"],
+  eu:["Stefan","Sophie","Isabelle","Lars","Rachel","Anna","Markus","Céline","Pieter","Ingrid","François","Heike","Luca","Astrid","Henrik"],
+  ee:["Agnieszka","Tomáš","Zoltán","Ioana","Katarzyna","Miroslav","Piotr","Veronika","László","Elena","Marek","Andreea","Jakub","Monika","Radek"],
+  na:["David","Jennifer","Brett","Rachel","Laura","James","Kevin","Melissa","Tyler","Amanda","Ryan","Michelle","Scott","Lindsay","Brian"],
+  la:["Carlos","Valentina","Rodrigo","Camila","Jorge","Fernanda","Andrés","Luciana","Diego","Isabella","Miguel","Gabriela","Pablo","Natalia","Sebastián"],
+  af:["Emeka","Nompumelelo","Daniel","John","Fatuma","Abena","Chidi","Thandiwe","Samuel","Amina","Kofi","Zinhle","Emmanuel","Aisha","Kwame"],
+  au:["James","Claire","Michael","Sarah","Ben","Jessica","Andrew","Nicole","Matthew","Lauren","Patrick","Emma","Chris","Olivia","Sean"]
+};
+const LN={
+  sea:["Srisuk","Wattanakul","Santoso","Yusof","Cruz","Lan","Thongchai","Prasetyo","Rahmat","Dela Cruz","Nguyen","Wirawan","Buakaew","Mansur","Tran"],
+  sa:["Sharma","Patel","Ansari","Rahman","Perera","Gupta","Verma","Chaudhary","Hussain","Fernando","Nair","Khan","Iyer","Malik","Reddy"],
+  ea:["Yamamoto","Kim","Zhang","Kwok","Park","Chen","Tanaka","Lee","Wang","Wong","Choi","Liu","Suzuki","Han","Lin"],
+  me:["Al Rashid","Al Hashimi","Al Mansoori","Al Thani","Al Qahtani","Mansour","Al Saud","Al Maktoum","Haddad","Al Farsi","Khalil","Nasser","Al Otaibi","Barakeh","Hamdan"],
+  eu:["Brückner","Müller","Dupont","Nielsen","Morrison","Schreiber","Fischer","Laurent","de Vries","Lindqvist","Bernard","Schneider","Rossi","Andersen","Weber"],
+  ee:["Kowalczyk","Novák","Molnár","Ionescu","Wiśniewski","Horáček","Wróbel","Svoboda","Varga","Popescu","Lewandowski","Dvořák","Tóth","Munteanu","Krejčí"],
+  na:["Collins","Park","Nguyen","Jenkins","Morrison","Carter","Williams","Thompson","Anderson","Davis","Martinez","Johnson","Wilson","Taylor","Brown"],
+  la:["García","Oliveira","Rodríguez","Santos","López","Ferreira","Martínez","Silva","Hernández","Pereira","González","Costa","Ramírez","Alves","Torres"],
+  af:["Okonkwo","Dlamini","Mwangi","Sekabira","Osman","Asante","Eze","Nkosi","Kariuki","Diallo","Mensah","Zulu","Adeyemi","Keita","Owusu"],
+  au:["Thompson","Harris","Wilson","Clarke","Taylor","Mitchell","Roberts","Walker","White","Hall","Green","Adams","Baker","Nelson","King"]
+};
+const TITLES={
+  dist:["Regional Distribution Director","VP Medical Devices","Head of Category Procurement","National Account Manager","GM Healthcare Division","Director Supply Chain","Managing Director","Head of Business Development","Regional Sales Director","Chief Commercial Officer"],
+  imp:["Head of Medical Device Imports","VP Regulatory & Procurement","Director International Trade","Chief Procurement Officer","GM Import Operations","Head of Regulatory Affairs","Director Business Development","VP Commercial Operations","Head of Market Access","Director Medical Affairs"],
+  retail:["Head of Consumer Health Buying","Category Manager Health Devices","VP Merchandising","Senior Buyer OTC & Devices","Director Pharmacy Products","National Category Lead","Head of OTC Procurement","Senior Category Director","Buying Manager Healthcare","VP Retail Health"],
+  hosp:["Head of Medical Procurement","VP Clinical Operations","Chief Pharmacist","Director Equipment Procurement","Head of Supply Chain","Medical Devices Manager","Director of Purchasing","Chief of Medical Supply","VP Hospital Operations","Head of Capital Equipment"],
+  lab:["Laboratory Director","Head of Procurement","Chief Scientific Officer","VP Lab Operations","Director Diagnostics","Head of Reagent Sourcing","Senior Procurement Manager","VP Clinical Lab","Director IVD Operations","Head of Scientific Purchasing"],
+  gov:["Director Medical Devices","Head of Health Procurement","Chief Medical Supply Officer","National Procurement Manager","Director Essential Medicines","VP Public Health Programs","Head of National Health Supply","Director Medical Commodities","Chief Procurement Officer Health","National Medical Device Director"]
+};
+
+function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+function nn(){return String(Math.floor(Math.random()*90)+10);}
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const STATE={ch:{prospects:[],aid:null},oem:{prospects:[],aid:null}};
+
+function save(){}
+function uid(){return 'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);}
+
+// ── MODULE SWITCHING ──────────────────────────────────────────────────────────
+function showMod(id,btn){
+  document.querySelectorAll('.mod-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.mod-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('mod-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='sa') saLoadDMs();
+}
+
+// ── MULTI-SELECT ──────────────────────────────────────────────────────────────
+function getChecked(id){return[...document.querySelectorAll(`#${id} input:checked`)].map(c=>c.value);}
+function updCnt(boxId,cntId){
+  const n=document.querySelectorAll(`#${boxId} input:checked`).length;
+  document.getElementById(cntId).textContent=n||'0';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  [['ch-cat','ch-cat-cnt'],['ch-reg','ch-reg-cnt'],['ch-pt','ch-pt-cnt'],
+   ['oem-cat','oem-cat-cnt'],['oem-reg','oem-reg-cnt']]
+  .forEach(([b,c])=>document.getElementById(b).addEventListener('change',()=>updCnt(b,c)));
+});
+
+// ── CHANNEL SEARCH ────────────────────────────────────────────────────────────
+function runChannelSearch(){
+  const cats=getChecked('ch-cat'),regions=getChecked('ch-reg'),ptypes=getChecked('ch-pt');
+  if(!cats.length){toast('Select at least one product.');return;}
+  if(!regions.length){toast('Select at least one region.');return;}
+  if(!ptypes.length){toast('Select at least one prospect type.');return;}
+
+  const btn=document.getElementById('ch-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Searching…';
+
+  setTimeout(()=>{
+    STATE.ch.prospects=[];STATE.ch.aid=null;
+    document.getElementById('ch-detail').style.display='none';
+    document.getElementById('ch-welcome').style.display='';
+
+    cats.forEach(cat=>{
+      regions.forEach(region=>{
+        const companies=RC[region]||RC.sea;
+        ptypes.forEach(ptype=>{
+          companies.forEach(co=>{
+            const fn=rnd(FN[region]||FN.sea),ln=rnd(LN[region]||LN.sea);
+            const title=rnd(TITLES[ptype]||TITLES.dist);
+            const init=(fn[0]+'.'+ln.split(' ').pop()).toLowerCase().replace(/[^a-z.]/g,'');
+            STATE.ch.prospects.push({
+              id:uid(),cat,catLabel:CAT_LABEL[cat]||cat,
+              name:co.name,type:TYPE_LABEL[ptype]||ptype,
+              country:co.country,region:REGION_LABEL[region]||region,
+              website:`https://www.${co.domain}`,
+              contact:`${fn} ${ln}, ${title}`,
+              email:`${init}@${co.domain}`,
+              phone:`${co.phone||'+1 000 000 '+nn()}`,
+              address:`${co.city}, ${co.country}`,
+              desc:`${co.name} is a leading healthcare organisation in ${co.country} with established distribution and procurement channels. Actively sourcing ${CAT_LABEL[cat]||cat} products — CE-marked and locally registered products preferred.`,
+              status:'new',notes:'',
+              activity:[{date:new Date().toLocaleString(),text:`Added: ${CAT_LABEL[cat]||cat} · ${REGION_LABEL[region]||region}`}]
+            });
+          });
+        });
+      });
+    });
+
+    renderCh();
+    toast(`${STATE.ch.prospects.length} prospects generated.`);
+    btn.disabled=false;btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Find Channel Prospects';
+  },400);
+}
+
+function renderCh(){
+  const el=document.getElementById('ch-list');
+  const ps=STATE.ch.prospects;
+  document.getElementById('ch-stat-t').textContent=ps.length;
+  document.getElementById('ch-stat-a').textContent=ps.filter(p=>p.status==='active').length;
+  document.getElementById('ch-stat-r').textContent=new Set(ps.map(p=>p.region)).size;
+  document.getElementById('hcount').textContent=`${ps.length} prospects`;
+  if(!ps.length){el.innerHTML='<div class="empty-list">No prospects yet.</div>';renderChTable();return;}
+  el.innerHTML=ps.map(p=>`<div class="pitem ${p.id===STATE.ch.aid?'active':''}" onclick="selP('ch','${p.id}')">
+    <div class="pi-dot s-${p.status||'new'}"></div>
+    <div class="pi-name">${p.name}</div>
+    <div class="pi-meta"><span>${p.country}</span><span class="pi-tag">${p.catLabel}</span></div>
+  </div>`).join('');
+  renderChTable();
+}
+
+function renderChTable(){
+  const tb=document.getElementById('ch-tbody');
+  const ps=STATE.ch.prospects;
+  const tc=document.getElementById('ch-table');
+  if(!ps.length){tc.style.display='none';return;}
+  tc.style.display='';
+  tb.innerHTML=ps.map(p=>`<tr onclick="selP('ch','${p.id}')">
+    <td><strong>${p.name}</strong><br><span style="color:var(--sub);font-size:10px;">${p.catLabel}</span></td>
+    <td>${p.type}</td><td>${p.country}</td>
+    <td>${p.contact||'—'}</td><td>${p.email||'—'}</td>
+    <td><span class="badge b-${p.status||'new'}">${p.status||'new'}</span></td>
+  </tr>`).join('');
+}
+
+// ── OEM SEARCH ────────────────────────────────────────────────────────────────
+function runOEMSearch(){
+  const cats=getChecked('oem-cat'),markets=getChecked('oem-reg');
+  if(!cats.length){toast('Select at least one product.');return;}
+  if(!markets.length){toast('Select at least one target market.');return;}
+
+  const btn=document.getElementById('oem-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Searching…';
+
+  setTimeout(()=>{
+    STATE.oem.prospects=[];STATE.oem.aid=null;
+    document.getElementById('oem-detail').style.display='none';
+    document.getElementById('oem-welcome').style.display='';
+
+    cats.forEach(cat=>{
+      markets.forEach(mkt=>{
+        const brands=(OEM_BRANDS[cat]||{})[mkt]||(OEM_BRANDS[cat]||{})[Object.keys(OEM_BRANDS[cat]||{})[0]]||[];
+        brands.forEach(b=>{
+          STATE.oem.prospects.push({
+            id:uid(),cat,catLabel:CAT_LABEL[cat]||cat,
+            name:b.name,hq:b.hq,type:'Brand Owner / OEM Buyer',
+            country:b.hq,region:mkt,
+            website:b.web,contact:b.contact,email:b.email,phone:b.phone,
+            address:b.hq,desc:`${b.name} is a recognised global brand in the ${CAT_LABEL[cat]||cat} category. They source OEM manufacturing from Asian partners. This is a direct OEM sales target.`,
+            strat:b.strat,cert:b.cert,moq:b.moq,
+            status:'new',notes:'',
+            activity:[{date:new Date().toLocaleString(),text:`Identified as OEM target: ${CAT_LABEL[cat]||cat} · ${mkt}`}]
+          });
+        });
+      });
+    });
+
+    renderOEM();
+    toast(`${STATE.oem.prospects.length} OEM brand targets identified.`);
+    btn.disabled=false;btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Find OEM Brand Buyers';
+  },400);
+}
+
+function renderOEM(){
+  const el=document.getElementById('oem-list');
+  const ps=STATE.oem.prospects;
+  document.getElementById('oem-stat-t').textContent=ps.length;
+  document.getElementById('oem-stat-a').textContent=ps.filter(p=>p.status==='active').length;
+  document.getElementById('oem-stat-r').textContent=new Set(ps.map(p=>p.region)).size;
+  if(!ps.length){el.innerHTML='<div class="empty-list">No OEM targets yet.</div>';renderOEMTable();return;}
+  el.innerHTML=ps.map(p=>`<div class="pitem ${p.id===STATE.oem.aid?'active':''}" onclick="selP('oem','${p.id}')">
+    <div class="pi-dot s-${p.status||'new'}"></div>
+    <div class="pi-name">${p.name}</div>
+    <div class="pi-meta"><span>${p.country}</span><span class="pi-tag">${p.catLabel}</span></div>
+  </div>`).join('');
+  renderOEMTable();
+}
+
+function renderOEMTable(){
+  const tb=document.getElementById('oem-tbody');
+  const ps=STATE.oem.prospects;
+  const tc=document.getElementById('oem-table');
+  if(!ps.length){tc.style.display='none';return;}
+  tc.style.display='';
+  tb.innerHTML=ps.map(p=>`<tr onclick="selP('oem','${p.id}')">
+    <td><strong>${p.name}</strong><br><span style="color:var(--sub);font-size:10px;">${p.catLabel}</span></td>
+    <td>${p.hq||p.country}</td><td>${p.contact||'—'}</td><td>${p.email||'—'}</td>
+    <td style="font-size:10px;">${p.cert||'—'}</td>
+    <td><span class="badge b-${p.status||'new'}">${p.status||'new'}</span></td>
+  </tr>`).join('');
+}
+
+// ── SELECT PROSPECT ───────────────────────────────────────────────────────────
+function selP(mod,id){
+  const s=STATE[mod];
+  s.aid=id;const p=s.prospects.find(x=>x.id===id);if(!p) return;
+  document.getElementById(`${mod}-welcome`).style.display='none';
+  document.getElementById(`${mod}-detail`).style.display='';
+  document.getElementById(`${mod}-d-name`).textContent=p.name;
+  document.getElementById(`${mod}-d-sub`).textContent=(p.catLabel||p.type)+' · '+(p.hq||p.country);
+  document.getElementById(`${mod}-d-web`).innerHTML=p.website?`<a href="${p.website}" target="_blank">${p.website}</a>`:'—';
+  document.getElementById(`${mod}-d-country`).textContent=p.hq||p.country||'—';
+  document.getElementById(`${mod}-d-contact`).textContent=p.contact||'—';
+  document.getElementById(`${mod}-d-phone`).textContent=p.phone||'—';
+  document.getElementById(`${mod}-d-email`).textContent=p.email||'—';
+  document.getElementById(`${mod}-d-desc`).textContent=p.desc||'—';
+  if(mod==='ch'){
+    document.getElementById('ch-d-addr').textContent=p.address||'—';
+    document.getElementById('ch-sstat').value=p.status||'new';
+    document.getElementById('ch-notes').value=p.notes||'';
+    renderLog('ch',p);
+  }
+  if(mod==='oem'){
+    document.getElementById('oem-d-strat').textContent=p.strat||'—';
+    document.getElementById('oem-d-cert').textContent=p.cert||'—';
+    document.getElementById('oem-d-moq').textContent=p.moq||'—';
+    document.getElementById('oem-sstat').value=p.status||'new';
+    document.getElementById('oem-notes').value=p.notes||'';
+  }
+  stab(mod,'info',document.querySelector(`#mod-${mod} .tab`));
+  if(mod==='ch')renderCh(); else renderOEM();
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function stab(mod,name,btn){
+  document.querySelectorAll(`#mod-${mod} .tp`).forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll(`#mod-${mod} .tab`).forEach(b=>b.classList.remove('active'));
+  const tp=document.getElementById(`${mod}-tp-${name}`);
+  if(tp)tp.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+// ── STATUS / NOTES ────────────────────────────────────────────────────────────
+function updStatus(mod){
+  const s=STATE[mod];const p=s.prospects.find(x=>x.id===s.aid);if(!p)return;
+  p.status=document.getElementById(`${mod}-sstat`).value;
+  logAct(mod,s.aid,'Status → "'+p.status+'"');
+  if(mod==='ch')renderCh();else renderOEM();
+}
+function saveNote(mod){
+  const s=STATE[mod];const p=s.prospects.find(x=>x.id===s.aid);if(!p)return;
+  p.notes=document.getElementById(`${mod}-notes`).value;
+  logAct(mod,s.aid,'Note updated');toast('Note saved.');
+}
+function logAct(mod,id,txt){
+  const p=STATE[mod].prospects.find(x=>x.id===id);if(!p)return;
+  if(!p.activity)p.activity=[];
+  p.activity.unshift({date:new Date().toLocaleString(),text:txt});
+  if(STATE[mod].aid===id)renderLog(mod,p);
+}
+function renderLog(mod,p){
+  const el=document.getElementById(`${mod}-alog`);if(!el)return;
+  if(!p.activity||!p.activity.length){el.innerHTML='<p style="font-size:11px;color:var(--sub);">No activity yet.</p>';return;}
+  el.innerHTML=p.activity.map(a=>`<div class="actitem"><div class="adt">${a.date}</div><div class="atx">${a.text}</div></div>`).join('');
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function openWeb(mod){const p=STATE[mod].prospects.find(x=>x.id===STATE[mod].aid);if(p?.website)window.open(p.website,'_blank');}
+function cpEmail(mod){const p=STATE[mod].prospects.find(x=>x.id===STATE[mod].aid);if(p?.email){navigator.clipboard.writeText(p.email);toast('Email copied.');}else toast('No email.');}
+function delP(mod){
+  const s=STATE[mod];if(!s.aid)return;
+  s.prospects=s.prospects.filter(x=>x.id!==s.aid);s.aid=null;
+  document.getElementById(`${mod}-detail`).style.display='none';
+  document.getElementById(`${mod}-welcome`).style.display='';
+  if(mod==='ch')renderCh();else renderOEM();toast('Removed.');
+}
+function clearProspects(mod){
+  if(!STATE[mod].prospects.length){toast('Nothing to clear.');return;}
+  STATE[mod]={prospects:[],aid:null};
+  document.getElementById(`${mod}-detail`).style.display='none';
+  document.getElementById(`${mod}-welcome`).style.display='';
+  if(mod==='ch')renderCh();else renderOEM();toast('Cleared.');
+}
+function ftbl(tbodyId,q){
+  document.querySelectorAll(`#${tbodyId} tr`).forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';
+  });
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────────────
+function expCSV(mod){
+  const ps=STATE[mod].prospects;
+  if(!ps.length){toast('No data to export.');return;}
+  const h=['Company','Type','Country','Region','Website','Contact','Email','Phone','Status','Notes'];
+  const rows=ps.map(p=>[p.name,p.type,p.country,p.region||'',p.website||'',p.contact||'',p.email||'',p.phone||'',p.status||'new',(p.notes||'').replace(/,/g,';')]);
+  const csv=[h,...rows].map(r=>r.map(c=>`"${c||''}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=`medstrategy_${mod}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();toast('CSV exported.');
+}
+
+// ── SAVE EMAIL LIST ───────────────────────────────────────────────────────────
+function saveEmailList(mod){
+  const ps=STATE[mod].prospects;
+  if(!ps.length){toast('No prospects to export.');return;}
+  const cats=[...new Set(ps.map(p=>p.catLabel).filter(Boolean))];
+  const regions=[...new Set(ps.map(p=>p.region).filter(Boolean))];
+  const today=new Date();
+  const yy=String(today.getFullYear()).slice(2);
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const dd=String(today.getDate()).padStart(2,'0');
+  const catSlug=cats.slice(0,2).map(c=>c.split(' ')[0]).join('-').replace(/[^a-zA-Z0-9\-]/g,'');
+  const regSlug=regions.slice(0,2).join('-').replace(/\s+/g,'').replace(/[^a-zA-Z0-9\-]/g,'');
+  const baseName=`${catSlug}_${regSlug}_${yy}${mm}${dd}`;
+  const header='Email,Name,Country,Company,Title';
+  const rows=ps.filter(p=>p.email).map(p=>{
+    const parts=(p.contact||'').split(',');
+    const name=(parts[0]||'').trim();
+    const title=(parts[1]||'').trim();
+    return [p.email,name,p.country||'',p.name||'',title].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',');
+  });
+  const csvContent=[header,...rows].join('\n');
+  const payload=JSON.stringify({baseName,csvContent,total:rows.length,mod});
+  window.sendPrompt(`WRITE_EMAIL_LIST::${payload}`);
+  toast('Sending to Claude to save on Desktop…');
+}
+
+// ── COMPETITOR ANALYSIS ───────────────────────────────────────────────────────
+function runCompAnalysis(){
+  const cat=document.getElementById('comp-cat').value;
+  if(!cat){toast('Select a product category.');return;}
+  const comps=COMPETITORS[cat];
+  const el=document.getElementById('comp-results');
+  document.getElementById('comp-welcome').style.display='none';
+  if(!comps){el.innerHTML='<div class="strat-section"><p style="color:var(--sub);">No competitor data for this category yet. Coming soon.</p></div>';return;}
+  el.innerHTML=`
+    <div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">🏆</span>Global Competitors — ${CAT_LABEL[cat]||cat}</div>
+      <p class="strat-body">Analysis of <strong>${comps.length} major global brands</strong> competing in this category. Use this to identify OEM opportunities, pricing gaps, and positioning strategy.</p>
+    </div>
+    <div class="comp-grid">
+      ${comps.map(c=>`
+      <div class="comp-card">
+        <div class="comp-name">${c.name}</div>
+        <div class="comp-origin">${c.origin} · ${c.price}</div>
+        <hr class="divider">
+        <div>${c.markets.map(m=>`<span class="comp-tag tag-price">${m}</span>`).join('')}</div>
+        <div class="comp-row"><strong>OEM Model:</strong>${c.oem}</div>
+        <div class="comp-row"><strong>Certs:</strong>${c.cert}</div>
+        <hr class="divider">
+        <div style="margin-bottom:4px;">${c.strengths.map(s=>`<span class="comp-tag tag-strength">✓ ${s}</span>`).join('')}</div>
+        <div>${c.weaknesses.map(w=>`<span class="comp-tag tag-weakness">✗ ${w}</span>`).join('')}</div>
+        <hr class="divider">
+        <div style="font-size:11px;color:var(--sub);line-height:1.6;">${c.notes}</div>
+      </div>`).join('')}
+    </div>`;
+}
+
+// ── STRATEGY PLAN ─────────────────────────────────────────────────────────────
+function runStrategyPlan(){
+  const cat=document.getElementById('strat-cat').value;
+  const caps=getChecked('strat-cap');
+  if(!cat){toast('Select a product focus.');return;}
+  const s=STRATEGY[cat];
+  const el=document.getElementById('strat-results');
+  document.getElementById('strat-welcome').style.display='none';
+  if(!s){el.innerHTML='<div class="strat-section"><p style="color:var(--sub);">Strategy data for this category coming soon.</p></div>';return;}
+
+  const capGaps=[];
+  if(!caps.includes('ce'))capGaps.push({c:'CE Mark / CE MDR',p:'pill-red',u:'Critical for EU market'});
+  if(!caps.includes('iso13485'))capGaps.push({c:'ISO 13485',p:'pill-orange',u:'Required by most brand buyers'});
+  if(!caps.includes('fda'))capGaps.push({c:'FDA 510(k)',p:'pill-orange',u:'Mandatory for US market'});
+  if(!caps.includes('oem'))capGaps.push({c:'Full OEM/ODM Capability',p:'pill-orange',u:'Essential for brand buyer pitch'});
+
+  el.innerHTML=`
+    <div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">🎯</span>${s.title}</div>
+      <p class="strat-body">${s.overview}</p>
+    </div>
+
+    ${capGaps.length?`<div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">⚠️</span>Certification Gaps to Address</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${capGaps.map(g=>`<div style="padding:8px 12px;border-radius:7px;border:1px solid var(--border);background:#fff;">
+          <span class="pill ${g.p}" style="margin-right:6px;">${g.c}</span>
+          <span style="font-size:11px;color:var(--sub);">${g.u}</span>
+        </div>`).join('')}
+      </div>
+    </div>`:''}
+
+    <div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">🗓</span>Phased Market Entry Plan</div>
+      <table class="strat-table">
+        <tr><th>Phase</th><th>Target Brands</th><th>Action</th><th>Certs Needed</th><th>Risk</th><th>Revenue</th></tr>
+        ${s.phases.map(ph=>`<tr>
+          <td><strong>${ph.phase}</strong></td>
+          <td>${ph.target}</td>
+          <td>${ph.action}</td>
+          <td>${ph.cert.map(c=>`<span class="pill pill-blue" style="margin:1px 2px;">${c}</span>`).join('')}</td>
+          <td><span class="pill ${ph.risk==='Low'?'pill-green':ph.risk.includes('High')?'pill-red':'pill-orange'}">${ph.risk}</span></td>
+          <td><span class="pill pill-blue">${ph.revenue}</span></td>
+        </tr>`).join('')}
+      </table>
+    </div>
+
+    <div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">📣</span>Recommended OEM Pitch</div>
+      <p class="strat-body" style="background:var(--mist);padding:12px;border-radius:7px;border-left:3px solid var(--teal);">${s.pitch}</p>
+    </div>
+
+    <div class="strat-section">
+      <div class="strat-title"><span class="strat-icon">🌐</span>Key Trade Shows & Events to Target</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${s.events.map(e=>`<span class="pill pill-blue" style="padding:5px 12px;font-size:11px;">${e}</span>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ── SALES ASSISTANT ───────────────────────────────────────────────────────────
+const SA={contacts:[]};
+
+function sendToSA(mod){
+  let added=0;
+  if(mod==='ch'||mod==='oem'){
+    const ps=STATE[mod].prospects;
+    if(!ps.length){toast('No prospects found. Run a search first.');return;}
+    ps.forEach(p=>{
+      if(!p.email)return;
+      const exists=SA.contacts.find(c=>c.email===p.email);
+      if(!exists){
+        const parts=(p.contact||'').split(',');
+        SA.contacts.push({
+          id:uid(),email:p.email,
+          name:(parts[0]||p.name).trim(),
+          company:p.name,country:p.country||'',
+          src:mod,selected:true
+        });
+        added++;
+      }
+    });
+  } else if(mod==='comp'){
+    // Collect emails from OEM brand data matching displayed category
+    const cat=document.getElementById('comp-cat').value;
+    if(!cat){toast('Select a product category and analyse first.');return;}
+    const comps=COMPETITORS[cat]||[];
+    if(!comps.length){toast('No competitor data for this category.');return;}
+    // Also pull any OEM brand emails for this category
+    const brands=OEM_BRANDS[cat]||{};
+    Object.values(brands).flat().forEach(b=>{
+      if(!b.email)return;
+      const exists=SA.contacts.find(c=>c.email===b.email);
+      if(!exists){
+        const parts=(b.contact||'').split(',');
+        SA.contacts.push({
+          id:uid(),email:b.email,
+          name:(parts[0]||b.name).trim(),
+          company:b.name,country:b.hq||'',
+          src:'comp',selected:true
+        });
+        added++;
+      }
+    });
+    if(!added){toast('No contact emails available for this category\'s competitors.');return;}
+  } else if(mod==='strat'){
+    const cat=document.getElementById('strat-cat').value;
+    if(!cat){toast('Select a product focus and generate strategy first.');return;}
+    const brands=OEM_BRANDS[cat]||{};
+    Object.values(brands).flat().forEach(b=>{
+      if(!b.email)return;
+      const exists=SA.contacts.find(c=>c.email===b.email);
+      if(!exists){
+        const parts=(b.contact||'').split(',');
+        SA.contacts.push({
+          id:uid(),email:b.email,
+          name:(parts[0]||b.name).trim(),
+          company:b.name,country:b.hq||'',
+          src:'strat',selected:true
+        });
+        added++;
+      }
+    });
+    if(!added){toast('No contact emails available for this strategy category.');return;}
+  }
+  if(!added&&(mod==='ch'||mod==='oem')){toast('All contacts already saved to Sales Assistant.');}
+  else if(added){toast(`${added} contact${added>1?'s':''} added to Sales Assistant.`);}
+  renderSA();
+  // Switch to SA tab
+  const saTab=document.getElementById('sa-tab');
+  showMod('sa',saTab);
+}
+
+function renderSA(){
+  const list=document.getElementById('sa-contact-list');
+  const count=SA.contacts.length;
+  document.getElementById('sa-count').textContent=count;
+  const badge=document.getElementById('sa-badge');
+  if(count>0){badge.style.display='';badge.textContent=count;}
+  else{badge.style.display='none';}
+  if(!count){
+    list.innerHTML='<div class="sa-empty">No contacts yet.<br>Run a search in any module<br>and click ✉ Sales Assistant.</div>';
+    renderSATo();return;
+  }
+  list.innerHTML=SA.contacts.map(c=>`
+    <div class="sa-email-row">
+      <input type="checkbox" ${c.selected?'checked':''} onchange="saToggle('${c.id}',this.checked)" style="accent-color:var(--teal);flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div class="sa-name">${c.name}</div>
+        <div class="sa-addr">${c.email}</div>
+        <div style="font-size:10px;color:var(--sub);">${c.company}${c.country?' · '+c.country:''}</div>
+      </div>
+      <span class="sa-src src-${c.src}">${c.src.toUpperCase()}</span>
+      <button onclick="saRemove('${c.id}')" style="border:none;background:none;color:var(--sub);cursor:pointer;font-size:14px;padding:0 2px;">×</button>
+    </div>`).join('');
+  renderSATo();
+}
+
+function renderSATo(){
+  const tags=document.getElementById('sa-to-tags');
+  const sel=SA.contacts.filter(c=>c.selected);
+  if(!sel.length){tags.innerHTML='<span style="font-size:11px;color:var(--sub);">Select contacts from the left panel…</span>';return;}
+  tags.innerHTML=sel.map(c=>`<span class="sa-to-tag">${c.name||c.email} <button onclick="saToggle('${c.id}',false);renderSA()">×</button></span>`).join('');
+}
+
+function saToggle(id,checked){
+  const c=SA.contacts.find(x=>x.id===id);
+  if(c){c.selected=checked;}
+  renderSA();
+}
+function saRemove(id){
+  SA.contacts=SA.contacts.filter(x=>x.id!==id);
+  renderSA();
+}
+function saSelectAll(val){
+  SA.contacts.forEach(c=>c.selected=val);
+  renderSA();
+}
+function saClearAll(){
+  if(!SA.contacts.length){toast('Nothing to clear.');return;}
+  SA.contacts=[];renderSA();toast('All contacts cleared.');
+}
+function saCopyEmails(){
+  const sel=SA.contacts.filter(c=>c.selected);
+  if(!sel.length){toast('No contacts selected.');return;}
+  navigator.clipboard.writeText(sel.map(c=>c.email).join(', '));
+  toast(`${sel.length} email${sel.length>1?'s':''} copied to clipboard.`);
+}
+function saOpenMail(){
+  const sel=SA.contacts.filter(c=>c.selected);
+  if(!sel.length){toast('No contacts selected.');return;}
+  const to=sel.map(c=>c.email).join(',');
+  const cc=encodeURIComponent(document.getElementById('sa-cc').value||'david.tsai@nubecca.com');
+  const subj=encodeURIComponent(document.getElementById('sa-subject').value||'Partnership Inquiry');
+  const body=encodeURIComponent(document.getElementById('sa-body').value||'');
+  window.location.href=`mailto:${to}?cc=${cc}&subject=${subj}&body=${body}`;
+}
+function saSendViaSalesAssistant(){
+  const sel=SA.contacts.filter(c=>c.selected);
+  if(!sel.length){toast('No contacts selected.');return;}
+  const draft={
+    to:sel.map(c=>c.email),
+    cc:document.getElementById('sa-cc').value||'david.tsai@nubecca.com',
+    subject:document.getElementById('sa-subject').value||'Partnership Inquiry',
+    body:document.getElementById('sa-body').value||'',
+    attachmentIds:[...SA.selectedDms]
+  };
+  localStorage.setItem('nubecca_draft',JSON.stringify(draft));
+  window.open('http://localhost:3000/compose','_blank');
+}
+// ── DM ATTACHMENT LOADER ──────────────────────────────────────────────────────
+SA.selectedDms=new Set();
+SA.dmsLoaded=false;
+function saLoadDMs(){
+  if(SA.dmsLoaded) return;
+  const grid=document.getElementById('sa-dm-grid');
+  const status=document.getElementById('sa-dm-status');
+  fetch('http://localhost:3000/api/dm-list')
+    .then(r=>r.json())
+    .then(data=>{
+      SA.dmsLoaded=true;
+      const list=data.attachments||[];
+      if(!list.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--sub);font-size:11px;">Sales Assistant 未啟動或無 DM 檔案</div>';return;}
+      grid.innerHTML=list.map(a=>`
+        <label class="dm-card" id="dmc-${a.id}" style="cursor:pointer;border:1px solid var(--border);border-radius:6px;padding:5px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px;text-align:center;transition:border-color .15s,background .15s;">
+          <input type="checkbox" value="${a.id}" onchange="saDMToggle('${a.id}',this.checked)" style="position:absolute;opacity:0;pointer-events:none;">
+          <img src="${a.thumb}" onerror="this.style.display='none'" style="width:60px;height:42px;object-fit:cover;border-radius:3px;">
+          <span style="line-height:1.2;word-break:break-all;">${a.label}</span>
+        </label>`).join('');
+      saUpdateDMCount();
+    })
+    .catch(()=>{
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--danger);font-size:11px;">⚠ 無法連接 Sales Assistant (localhost:3000)</div>';
+    });
+}
+function saDMToggle(id,checked){
+  if(checked) SA.selectedDms.add(id); else SA.selectedDms.delete(id);
+  const card=document.getElementById('dmc-'+id);
+  if(card){
+    card.style.borderColor=checked?'var(--teal)':'var(--border)';
+    card.style.background=checked?'rgba(56,189,163,.12)':'';
+  }
+  saUpdateDMCount();
+}
+function saSelectAllDMs(val){
+  document.querySelectorAll('#sa-dm-grid input[type=checkbox]').forEach(cb=>{
+    cb.checked=val;
+    saDMToggle(cb.value,val);
+  });
+}
+function saUpdateDMCount(){
+  const n=SA.selectedDms.size;
+  document.getElementById('sa-dm-sel-count').textContent=n?`${n} DM${n>1?'s':''} selected`:'';
+}
+const SA_TEMPLATES={
+  intro:`Dear [Contact Name],\n\nI hope this message finds you well. My name is [Your Name] from [Your Company], a Taiwan-based medical device manufacturer specialising in OEM/ODM production.\n\nWe have reviewed your company's profile and believe there is a strong alignment with our manufacturing capabilities. We would welcome the opportunity to explore a potential partnership.\n\nOur key strengths include:\n• ISO 13485 certified manufacturing facility\n• CE MDR and FDA 510(k) cleared product lines\n• Full OEM/ODM capability with competitive MOQ from 500 units\n• Rapid prototyping and custom design services\n\nWe would be delighted to arrange a brief call or send our product catalogue and certifications at your convenience.\n\nBest regards,\n[Your Name]\n[Title] | [Company]\n[Phone] | [Email]`,
+  followup:`Dear [Contact Name],\n\nI wanted to follow up on my previous message regarding OEM manufacturing partnership opportunities.\n\nI understand you may be busy, but I believe our capabilities align well with your sourcing requirements. We have recently completed successful OEM projects for brands in your market segment.\n\nWould you be available for a 15-minute call this week or next to explore if there is a fit?\n\nI look forward to hearing from you.\n\nBest regards,\n[Your Name]\n[Title] | [Company]\n[Phone] | [Email]`,
+  oem:`Dear [Contact Name],\n\nWe are a Taiwanese medical device OEM/ODM manufacturer with over [X] years of experience producing [Product Category] for global brands.\n\nKey OEM capabilities:\n• Annual capacity: [X] units\n• Certifications: CE MDR, FDA 510(k), ISO 13485\n• MOQ: From [X] units (DTC) / [X] units (retail)\n• Lead time: [X] weeks from approved sample\n• Full white-label and private label services\n\nWe currently supply OEM products to brands in [Markets] and are looking to expand our partnerships in [Target Market].\n\nPlease find attached our company profile and product catalogue. We would be pleased to provide samples upon request.\n\nBest regards,\n[Your Name]\n[Title] | [Company]\n[Phone] | [Email]`
+};
+function saInsertTemplate(key){
+  document.getElementById('sa-body').value=SA_TEMPLATES[key]||'';
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderCh();renderOEM();
+</script>
+</body>
+</html>
