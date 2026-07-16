@@ -527,6 +527,14 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
           </div>
           <div id="sa-dm-sel-count" style="font-size:10px;color:var(--teal);margin-top:6px;font-weight:600;"></div>
         </div>
+        <!-- Video Link -->
+        <div class="sa-field">
+          <label>Product Video Link <span style="font-size:9px;color:var(--sub);font-weight:400;">(YouTube / Google Drive — 貼入後自動帶入 email 內文)</span></label>
+          <div class="sa-field-val" style="display:flex;gap:6px;align-items:center;">
+            <input type="url" id="sa-video-url" placeholder="https://youtu.be/..." style="margin-top:4px;flex:1;">
+            <button class="btn btn-ghost" style="font-size:10px;padding:4px 10px;margin-top:4px;white-space:nowrap;" onclick="saInsertVideoLink()">插入內文</button>
+          </div>
+        </div>
         <!-- Body -->
         <div class="sa-body-wrap">
           <label style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px;">Body</label>
@@ -1677,7 +1685,22 @@ const SA_TEMPLATES={
   oem:`Dear [Contact Name],\n\nWe are a Taiwanese medical device OEM/ODM manufacturer with over [X] years of experience producing [Product Category] for global brands.\n\nKey OEM capabilities:\n• Annual capacity: [X] units\n• Certifications: CE MDR, FDA 510(k), ISO 13485\n• MOQ: From [X] units (DTC) / [X] units (retail)\n• Lead time: [X] weeks from approved sample\n• Full white-label and private label services\n\nWe currently supply OEM products to brands in [Markets] and are looking to expand our partnerships in [Target Market].\n\nPlease find attached our company profile and product catalogue. We would be pleased to provide samples upon request.\n\nBest regards,\n[Your Name]\n[Title] | [Company]\n[Phone] | [Email]`
 };
 function saInsertTemplate(key){
-  document.getElementById('sa-body').value=SA_TEMPLATES[key]||'';
+  let text=SA_TEMPLATES[key]||'';
+  const url=document.getElementById('sa-video-url').value.trim();
+  if(url) text=text.replace('[VIDEO_LINK]',url);
+  document.getElementById('sa-body').value=text;
+}
+function saInsertVideoLink(){
+  const url=document.getElementById('sa-video-url').value.trim();
+  if(!url){toast('請先填入影片連結。');return;}
+  const ta=document.getElementById('sa-body');
+  const pos=ta.selectionStart;
+  const before=ta.value.substring(0,pos);
+  const after=ta.value.substring(pos);
+  ta.value=before+'\n▶ Product Video: '+url+'\n'+after;
+  ta.selectionStart=ta.selectionEnd=pos+('\n▶ Product Video: '+url+'\n').length;
+  ta.focus();
+  toast('影片連結已插入內文。');
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
