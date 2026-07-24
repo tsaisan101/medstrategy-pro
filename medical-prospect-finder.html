@@ -319,7 +319,7 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
           <button class="btn btn-teal" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('ch')">✉ Sales Assistant</button>
         </div>
       </div>
-      <table><thead><tr><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Website</th><th>Status</th></tr></thead>
+      <table><thead><tr><th style="width:52px;text-align:center;">NO.</th><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Website</th><th>Status</th></tr></thead>
       <tbody id="ch-tbody"></tbody></table>
     </div>
   </div>
@@ -427,7 +427,7 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
           <button class="btn btn-gold" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('oem')">✉ Sales Assistant</button>
         </div>
       </div>
-      <table><thead><tr><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Website</th><th>Status</th></tr></thead>
+      <table><thead><tr><th style="width:52px;text-align:center;">NO.</th><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Website</th><th>Status</th></tr></thead>
       <tbody id="oem-tbody"></tbody></table>
     </div>
   </div>
@@ -1200,7 +1200,8 @@ function renderChTable(){
   tc.style.display='';
   const cName=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',')[0].trim():c||'—'; };
   const cTitle=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',').slice(1).join(',').trim():p.type||'—'; };
-  tb.innerHTML=ps.map(p=>`<tr onclick="selP('ch','${p.id}')">
+  tb.innerHTML=ps.map((p,i)=>`<tr onclick="selP('ch','${p.id}')">
+    <td style="text-align:center;color:var(--sub);font-size:10px;">${String(i+1).padStart(4,'0')}</td>
     <td>${p.email||'—'}</td>
     <td>${cName(p)}</td>
     <td style="font-size:10px;color:var(--sub);">${cTitle(p)}</td>
@@ -1272,7 +1273,8 @@ function renderOEMTable(){
   tc.style.display='';
   const oCName=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',')[0].trim():c||'—'; };
   const oCTitle=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',').slice(1).join(',').trim():p.type||'—'; };
-  tb.innerHTML=ps.map(p=>`<tr onclick="selP('oem','${p.id}')">
+  tb.innerHTML=ps.map((p,i)=>`<tr onclick="selP('oem','${p.id}')">
+    <td style="text-align:center;color:var(--sub);font-size:10px;">${String(i+1).padStart(4,'0')}</td>
     <td>${p.email||'—'}</td>
     <td>${oCName(p)}</td>
     <td style="font-size:10px;color:var(--sub);">${oCTitle(p)}</td>
@@ -1376,8 +1378,8 @@ function _expRows(mod){
   const ps=STATE[mod].prospects;
   if(!ps.length){toast('No data to export.');return null;}
   const splitC=c=>{ if(!c) return ['','']; const i=c.indexOf(','); return i>-1?[c.slice(0,i).trim(),c.slice(i+1).trim()]:[c,''];};
-  const h=['Email','Contact 聯絡人','Position 職位','Country 國家','Company 公司名','Website'];
-  const rows=ps.map(p=>{ const [cn,ct]=splitC(p.contact); return [p.email||'',cn,ct,p.hq||p.country||'',p.name,p.website||'']; });
+  const h=['NO.','Email','Contact 聯絡人','Position 職位','Country 國家','Company 公司名','Website'];
+  const rows=ps.map((p,i)=>{ const [cn,ct]=splitC(p.contact); return [String(i+1).padStart(4,'0'),p.email||'',cn,ct,p.hq||p.country||'',p.name,p.website||'']; });
   return {h,rows};
 }
 function expCSV(mod){
@@ -1412,12 +1414,13 @@ function saveEmailList(mod){
   const catSlug=cats.slice(0,2).map(c=>c.split(' ')[0]).join('-').replace(/[^a-zA-Z0-9\-]/g,'');
   const regSlug=regions.slice(0,2).join('-').replace(/\s+/g,'').replace(/[^a-zA-Z0-9\-]/g,'');
   const baseName=`${catSlug}_${regSlug}_${yy}${mm}${dd}`;
-  const header='Email,Name,Country,Company,Title';
-  const rows=ps.filter(p=>p.email).map(p=>{
+  const header='NO.,Email,Name,Country,Company,Title';
+  const emailPs=ps.filter(p=>p.email);
+  const rows=emailPs.map((p,i)=>{
     const parts=(p.contact||'').split(',');
     const name=(parts[0]||'').trim();
     const title=(parts[1]||'').trim();
-    return [p.email,name,p.country||'',p.name||'',title].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',');
+    return [String(i+1).padStart(4,'0'),p.email,name,p.country||'',p.name||'',title].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',');
   });
   const csvContent=[header,...rows].join('\n');
   const payload=JSON.stringify({baseName,csvContent,total:rows.length,mod});
