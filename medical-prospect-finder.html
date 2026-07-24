@@ -317,7 +317,7 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
           <button class="btn btn-teal" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('ch')">✉ Sales Assistant</button>
         </div>
       </div>
-      <table><thead><tr><th>Organisation</th><th>Type</th><th>Country</th><th>Contact</th><th>Email</th><th>Status</th></tr></thead>
+      <table><thead><tr><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Status</th></tr></thead>
       <tbody id="ch-tbody"></tbody></table>
     </div>
   </div>
@@ -424,7 +424,7 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
           <button class="btn btn-gold" style="font-size:11px;padding:5px 10px;" onclick="sendToSA('oem')">✉ Sales Assistant</button>
         </div>
       </div>
-      <table><thead><tr><th>Brand</th><th>HQ</th><th>OEM Contact</th><th>Email</th><th>Certifications</th><th>Status</th></tr></thead>
+      <table><thead><tr><th>Email</th><th>Contact 聯絡人</th><th>Position 職位</th><th>Country 國家</th><th>Company 公司</th><th>Status</th></tr></thead>
       <tbody id="oem-tbody"></tbody></table>
     </div>
   </div>
@@ -1195,10 +1195,14 @@ function renderChTable(){
   const tc=document.getElementById('ch-table');
   if(!ps.length){tc.style.display='none';return;}
   tc.style.display='';
+  const contactName=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',')[0].trim():c||'—'; };
+  const contactTitle=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',').slice(1).join(',').trim():p.type||'—'; };
   tb.innerHTML=ps.map(p=>`<tr onclick="selP('ch','${p.id}')">
-    <td><strong>${p.name}</strong><br><span style="color:var(--sub);font-size:10px;">${p.catLabel}</span></td>
-    <td>${p.type}</td><td>${p.country}</td>
-    <td>${p.contact||'—'}</td><td>${p.email||'—'}</td>
+    <td>${p.email||'—'}</td>
+    <td>${contactName(p)}</td>
+    <td style="font-size:10px;color:var(--sub);">${contactTitle(p)}</td>
+    <td>${p.country||'—'}</td>
+    <td><strong>${p.name}</strong></td>
     <td><span class="badge b-${p.status||'new'}">${p.status||'new'}</span></td>
   </tr>`).join('');
 }
@@ -1262,10 +1266,14 @@ function renderOEMTable(){
   const tc=document.getElementById('oem-table');
   if(!ps.length){tc.style.display='none';return;}
   tc.style.display='';
+  const oemContactName=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',')[0].trim():c||'—'; };
+  const oemContactTitle=p=>{ const c=p.contact||''; return c.includes(',')?c.split(',').slice(1).join(',').trim():p.type||'—'; };
   tb.innerHTML=ps.map(p=>`<tr onclick="selP('oem','${p.id}')">
-    <td><strong>${p.name}</strong><br><span style="color:var(--sub);font-size:10px;">${p.catLabel}</span></td>
-    <td>${p.hq||p.country}</td><td>${p.contact||'—'}</td><td>${p.email||'—'}</td>
-    <td style="font-size:10px;">${p.cert||'—'}</td>
+    <td>${p.email||'—'}</td>
+    <td>${oemContactName(p)}</td>
+    <td style="font-size:10px;color:var(--sub);">${oemContactTitle(p)}</td>
+    <td>${p.hq||p.country||'—'}</td>
+    <td><strong>${p.name}</strong></td>
     <td><span class="badge b-${p.status||'new'}">${p.status||'new'}</span></td>
   </tr>`).join('');
 }
