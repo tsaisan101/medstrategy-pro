@@ -285,12 +285,13 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
       </div>
       <div class="tp active" id="ch-tp-info">
         <div class="grid2">
-          <div class="fl"><label>Website</label><p id="ch-d-web">—</p></div>
-          <div class="fl"><label>Country</label><p id="ch-d-country">—</p></div>
-          <div class="fl"><label>Contact</label><p id="ch-d-contact">—</p></div>
-          <div class="fl"><label>Phone</label><p id="ch-d-phone">—</p></div>
           <div class="fl full"><label>Email</label><p id="ch-d-email">—</p></div>
+          <div class="fl"><label>Contact 聯絡人</label><p id="ch-d-contact">—</p></div>
+          <div class="fl"><label>Position 職位</label><p id="ch-d-sub2">—</p></div>
+          <div class="fl"><label>Country 國家</label><p id="ch-d-country">—</p></div>
+          <div class="fl"><label>Phone</label><p id="ch-d-phone">—</p></div>
           <div class="fl full"><label>Address</label><p id="ch-d-addr">—</p></div>
+          <div class="fl full"><label>Website</label><p id="ch-d-web">—</p></div>
           <div class="fl full"><label>Description</label><p id="ch-d-desc" style="color:var(--sub);line-height:1.6;">—</p></div>
         </div>
       </div>
@@ -386,11 +387,12 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
       </div>
       <div class="tp active" id="oem-tp-info">
         <div class="grid2">
-          <div class="fl"><label>Website</label><p id="oem-d-web">—</p></div>
-          <div class="fl"><label>HQ Country</label><p id="oem-d-country">—</p></div>
-          <div class="fl"><label>OEM Contact</label><p id="oem-d-contact">—</p></div>
-          <div class="fl"><label>Phone</label><p id="oem-d-phone">—</p></div>
           <div class="fl full"><label>Email</label><p id="oem-d-email">—</p></div>
+          <div class="fl"><label>Contact 聯絡人</label><p id="oem-d-contact">—</p></div>
+          <div class="fl"><label>Position 職位</label><p id="oem-d-sub2">—</p></div>
+          <div class="fl"><label>Country 國家</label><p id="oem-d-country">—</p></div>
+          <div class="fl"><label>Phone</label><p id="oem-d-phone">—</p></div>
+          <div class="fl full"><label>Website</label><p id="oem-d-web">—</p></div>
           <div class="fl full"><label>Brand Description</label><p id="oem-d-desc" style="color:var(--sub);line-height:1.6;">—</p></div>
         </div>
       </div>
@@ -1276,6 +1278,7 @@ function selP(mod,id){
   document.getElementById(`${mod}-detail`).style.display='';
   document.getElementById(`${mod}-d-name`).textContent=p.name;
   document.getElementById(`${mod}-d-sub`).textContent=(p.catLabel||p.type)+' · '+(p.hq||p.country);
+  document.getElementById(`${mod}-d-sub2`).textContent=p.type||p.catLabel||'—';
   document.getElementById(`${mod}-d-web`).innerHTML=p.website?`<a href="${p.website}" target="_blank">${p.website}</a>`:'—';
   document.getElementById(`${mod}-d-country`).textContent=p.hq||p.country||'—';
   document.getElementById(`${mod}-d-contact`).textContent=p.contact||'—';
