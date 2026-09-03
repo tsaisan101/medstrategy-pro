@@ -224,6 +224,10 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
         <label class="ms-item"><input type="checkbox" value="poct"><span>POCT</span></label>
         <label class="ms-item"><input type="checkbox" value="reagents"><span>Diagnostic Reagents</span></label>
       </div>
+      <div style="margin-top:8px;">
+        <div style="font-size:10px;color:var(--sub);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;">自定義產品別 Custom Product</div>
+        <input type="text" id="ch-custom-cat" placeholder="輸入產品名稱，如：X-Ray Machine…" style="width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid var(--bdr);border-radius:6px;font-size:12px;background:var(--bg2);color:var(--txt);outline:none;">
+      </div>
     </div>
     <div class="fblock">
       <div class="flabel">Region <span id="ch-reg-cnt" class="sel-cnt">0</span></div>
@@ -339,6 +343,10 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
         <label class="ms-item"><input type="checkbox" value="glucometer"><span>血糖機</span></label>
         <label class="ms-item"><input type="checkbox" value="tens"><span>TENS 電療機</span></label>
         <label class="ms-item"><input type="checkbox" value="nasal-wash"><span>洗鼻機</span></label>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="font-size:10px;color:var(--sub);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;">自定義產品別 Custom Product</div>
+        <input type="text" id="oem-custom-cat" placeholder="輸入產品名稱，如：Surgical Robot…" style="width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid var(--bdr);border-radius:6px;font-size:12px;background:var(--bg2);color:var(--txt);outline:none;">
       </div>
     </div>
     <div class="fblock">
@@ -1131,8 +1139,11 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 // ── CHANNEL SEARCH ────────────────────────────────────────────────────────────
 function runChannelSearch(){
-  const cats=getChecked('ch-cat'),regions=getChecked('ch-reg'),ptypes=getChecked('ch-pt');
-  if(!cats.length){toast('Select at least one product.');return;}
+  const cats=getChecked('ch-cat');
+  const customCat=(document.getElementById('ch-custom-cat').value||'').trim();
+  if(customCat) cats.push(customCat);
+  const regions=getChecked('ch-reg'),ptypes=getChecked('ch-pt');
+  if(!cats.length){toast('Select at least one product or enter a custom product name.');return;}
   if(!regions.length){toast('Select at least one region.');return;}
   if(!ptypes.length){toast('Select at least one prospect type.');return;}
 
@@ -1214,8 +1225,11 @@ function renderChTable(){
 
 // ── OEM SEARCH ────────────────────────────────────────────────────────────────
 function runOEMSearch(){
-  const cats=getChecked('oem-cat'),markets=getChecked('oem-reg');
-  if(!cats.length){toast('Select at least one product.');return;}
+  const cats=getChecked('oem-cat');
+  const customCat=(document.getElementById('oem-custom-cat').value||'').trim();
+  if(customCat) cats.push(customCat);
+  const markets=getChecked('oem-reg');
+  if(!cats.length){toast('Select at least one product or enter a custom product name.');return;}
   if(!markets.length){toast('Select at least one target market.');return;}
 
   const btn=document.getElementById('oem-btn');
