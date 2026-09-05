@@ -826,6 +826,140 @@ const RC = {
   ]
 };
 
+// General trade / import / distribution companies (non-medical)
+const GEN_RC = {
+  sea:[
+    {name:"Berli Jucker Group",country:"Thailand",domain:"bjc.co.th",city:"Bangkok"},
+    {name:"Siam Makro PCL",country:"Thailand",domain:"makro.pro",city:"Bangkok"},
+    {name:"Aeon Vietnam",country:"Vietnam",domain:"aeon.com.vn",city:"Ho Chi Minh City"},
+    {name:"Jardine Matheson SEA",country:"Singapore",domain:"jardines.com",city:"Singapore"},
+    {name:"PT Kalbe Farma (Consumer)",country:"Indonesia",domain:"kalbe.co.id",city:"Jakarta"},
+    {name:"SM Retail Philippines",country:"Philippines",domain:"smretail.com",city:"Pasay City"},
+    {name:"Dairy Farm International",country:"Singapore",domain:"dairyfarmgroup.com",city:"Singapore"},
+    {name:"Lotus's Thailand",country:"Thailand",domain:"lotusstores.com",city:"Bangkok"},
+    {name:"Giant Hypermarket Malaysia",country:"Malaysia",domain:"giant.com.my",city:"Shah Alam"},
+    {name:"Trans Retail Indonesia",country:"Indonesia",domain:"transretail.com",city:"Jakarta"},
+    {name:"Central Group Thailand",country:"Thailand",domain:"centralgroup.com",city:"Bangkok"},
+    {name:"Robinson Department Store",country:"Thailand",domain:"robinson.co.th",city:"Bangkok"}
+  ],
+  sa:[
+    {name:"Reliance Retail India",country:"India",domain:"relianceretail.com",city:"Mumbai"},
+    {name:"Future Group India",country:"India",domain:"futuregroup.in",city:"Mumbai"},
+    {name:"D-Mart Retail",country:"India",domain:"dmartindia.com",city:"Thane"},
+    {name:"Metro Cash & Carry India",country:"India",domain:"metro.co.in",city:"Bengaluru"},
+    {name:"Daraz Bangladesh",country:"Bangladesh",domain:"daraz.com.bd",city:"Dhaka"},
+    {name:"Keells Super Sri Lanka",country:"Sri Lanka",domain:"keells.com",city:"Colombo"},
+    {name:"Agora Retail Bangladesh",country:"Bangladesh",domain:"agorabd.com",city:"Dhaka"},
+    {name:"SPAR India",country:"India",domain:"sparindia.com",city:"Bengaluru"},
+    {name:"Big Bazaar India",country:"India",domain:"bigbazaar.com",city:"Mumbai"},
+    {name:"Star Bazaar India",country:"India",domain:"starbazaar.com",city:"Pune"}
+  ],
+  ea:[
+    {name:"Alibaba International",country:"China",domain:"alibaba.com",city:"Hangzhou"},
+    {name:"AEON Japan",country:"Japan",domain:"aeon.com",city:"Chiba"},
+    {name:"Lotte Trading",country:"South Korea",domain:"lotteshopping.com",city:"Seoul"},
+    {name:"Shinsegae International",country:"South Korea",domain:"shinsegae.com",city:"Seoul"},
+    {name:"FamilyMart Japan",country:"Japan",domain:"family.co.jp",city:"Tokyo"},
+    {name:"RT-Mart China",country:"China",domain:"rtmart.com.cn",city:"Shanghai"},
+    {name:"Wumart Group China",country:"China",domain:"wumart.com",city:"Beijing"},
+    {name:"PX Mart Taiwan",country:"Taiwan",domain:"pxmart.com.tw",city:"Taipei"},
+    {name:"Carrefour Taiwan",country:"Taiwan",domain:"carrefour.com.tw",city:"Taipei"},
+    {name:"CU Convenience Korea",country:"South Korea",domain:"bgfretail.com",city:"Seoul"},
+    {name:"Hankyu Hanshin Holdings",country:"Japan",domain:"hankyu-hanshin-hd.co.jp",city:"Osaka"},
+    {name:"Yonghui Superstores",country:"China",domain:"yonghui.com.cn",city:"Chongqing"}
+  ],
+  me:[
+    {name:"LuLu Hypermarket",country:"UAE",domain:"luluhypermarket.com",city:"Abu Dhabi"},
+    {name:"Carrefour Middle East",country:"UAE",domain:"carrefouruae.com",city:"Dubai"},
+    {name:"Majid Al Futtaim",country:"UAE",domain:"majidalfuttaim.com",city:"Dubai"},
+    {name:"Alshaya Group",country:"Kuwait",domain:"alshaya.com",city:"Kuwait City"},
+    {name:"Al Meera Consumer Goods",country:"Qatar",domain:"almeera.com.qa",city:"Doha"},
+    {name:"Spinneys Lebanon",country:"Lebanon",domain:"spinneys.com",city:"Beirut"},
+    {name:"Choithrams UAE",country:"UAE",domain:"choithrams.com",city:"Dubai"},
+    {name:"Nesto Hypermarket",country:"UAE",domain:"nestogroup.com",city:"Sharjah"},
+    {name:"Panda Retail Saudi Arabia",country:"Saudi Arabia",domain:"panda.com.sa",city:"Riyadh"},
+    {name:"Extra Saudi Arabia",country:"Saudi Arabia",domain:"extra.com",city:"Riyadh"},
+    {name:"Al Sadhan Stores",country:"Saudi Arabia",domain:"alsadhan.com",city:"Riyadh"}
+  ],
+  eu:[
+    {name:"Metro AG Germany",country:"Germany",domain:"metro.de",city:"Düsseldorf"},
+    {name:"Carrefour France",country:"France",domain:"carrefour.fr",city:"Paris"},
+    {name:"Tesco UK",country:"United Kingdom",domain:"tesco.com",city:"Welwyn Garden City"},
+    {name:"Lidl International",country:"Germany",domain:"lidl.com",city:"Neckarsulm"},
+    {name:"Aldi International",country:"Germany",domain:"aldi.com",city:"Mülheim"},
+    {name:"REWE Group Germany",country:"Germany",domain:"rewe.de",city:"Cologne"},
+    {name:"Kaufland Germany",country:"Germany",domain:"kaufland.de",city:"Neckarsulm"},
+    {name:"Decathlon International",country:"France",domain:"decathlon.com",city:"Villeneuve-d'Ascq"},
+    {name:"Leclerc France",country:"France",domain:"e.leclerc",city:"Landerneau"},
+    {name:"Delhaize Belgium",country:"Belgium",domain:"delhaize.be",city:"Brussels"},
+    {name:"Inditex Spain",country:"Spain",domain:"inditex.com",city:"Arteixo"},
+    {name:"Migros Switzerland",country:"Switzerland",domain:"migros.ch",city:"Zurich"}
+  ],
+  ee:[
+    {name:"X5 Retail Group",country:"Russia",domain:"x5.ru",city:"Moscow"},
+    {name:"Magnit Russia",country:"Russia",domain:"magnit.ru",city:"Krasnodar"},
+    {name:"Biedronka Poland",country:"Poland",domain:"biedronka.pl",city:"Poznań"},
+    {name:"Kaufland Poland",country:"Poland",domain:"kaufland.pl",city:"Neckarsulm"},
+    {name:"Zabka Poland",country:"Poland",domain:"zabka.pl",city:"Poznań"},
+    {name:"Tesco CEE",country:"Czech Republic",domain:"itesco.cz",city:"Prague"},
+    {name:"Penny Market Romania",country:"Romania",domain:"penny.ro",city:"Bucharest"},
+    {name:"Profi Romania",country:"Romania",domain:"profi.ro",city:"Timișoara"},
+    {name:"Mercator Slovenia",country:"Slovenia",domain:"mercator.si",city:"Ljubljana"},
+    {name:"Spar Hungary",country:"Hungary",domain:"spar.hu",city:"Budapest"},
+    {name:"Maxima Grupė Baltic",country:"Lithuania",domain:"maxima.lt",city:"Vilnius"}
+  ],
+  na:[
+    {name:"Walmart USA",country:"USA",domain:"walmart.com",city:"Bentonville AR"},
+    {name:"Costco Wholesale",country:"USA",domain:"costco.com",city:"Issaquah WA"},
+    {name:"Amazon North America",country:"USA",domain:"amazon.com",city:"Seattle WA"},
+    {name:"Target Corporation",country:"USA",domain:"target.com",city:"Minneapolis MN"},
+    {name:"Kroger Company",country:"USA",domain:"kroger.com",city:"Cincinnati OH"},
+    {name:"Loblaw Companies Canada",country:"Canada",domain:"loblaw.ca",city:"Brampton ON"},
+    {name:"Canadian Tire",country:"Canada",domain:"canadiantire.ca",city:"Toronto ON"},
+    {name:"Sam's Club",country:"USA",domain:"samsclub.com",city:"Bentonville AR"},
+    {name:"BJ's Wholesale Club",country:"USA",domain:"bjs.com",city:"Marlborough MA"},
+    {name:"Dollar General",country:"USA",domain:"dollargeneral.com",city:"Goodlettsville TN"},
+    {name:"Metro Inc Canada",country:"Canada",domain:"metro.ca",city:"Montreal QC"},
+    {name:"Empire Company Canada",country:"Canada",domain:"empireco.ca",city:"Stellarton NS"}
+  ],
+  la:[
+    {name:"Grupo Carso Mexico",country:"Mexico",domain:"carso.com.mx",city:"Mexico City"},
+    {name:"Walmart de Mexico",country:"Mexico",domain:"walmart.com.mx",city:"Mexico City"},
+    {name:"Grupo Bimbo",country:"Mexico",domain:"grupobimbo.com",city:"Mexico City"},
+    {name:"Cencosud Chile",country:"Chile",domain:"cencosud.com",city:"Santiago"},
+    {name:"Falabella Retail",country:"Chile",domain:"falabella.com",city:"Santiago"},
+    {name:"Grupo Pão de Açúcar Brazil",country:"Brazil",domain:"gpabr.com.br",city:"São Paulo"},
+    {name:"Raia Drogasil Brazil",country:"Brazil",domain:"radrd.com.br",city:"São Paulo"},
+    {name:"Sodimac Chile",country:"Chile",domain:"sodimac.cl",city:"Santiago"},
+    {name:"Exito Colombia",country:"Colombia",domain:"exito.com",city:"Medellín"},
+    {name:"Makro Colombia",country:"Colombia",domain:"makro.com.co",city:"Bogotá"}
+  ],
+  af:[
+    {name:"Shoprite Holdings",country:"South Africa",domain:"shopriteholdings.co.za",city:"Cape Town"},
+    {name:"Woolworths South Africa",country:"South Africa",domain:"woolworths.co.za",city:"Cape Town"},
+    {name:"Massmart Holdings",country:"South Africa",domain:"massmart.co.za",city:"Johannesburg"},
+    {name:"Nakumatt Holdings",country:"Kenya",domain:"nakumatt.net",city:"Nairobi"},
+    {name:"Carrefour Kenya",country:"Kenya",domain:"carrefour.com/ke",city:"Nairobi"},
+    {name:"Game Stores Africa",country:"South Africa",domain:"game.co.za",city:"Johannesburg"},
+    {name:"Spar South Africa",country:"South Africa",domain:"spar.co.za",city:"Pinetown"},
+    {name:"Jumia Africa",country:"Nigeria",domain:"jumia.com.ng",city:"Lagos"},
+    {name:"Choppies Botswana",country:"Botswana",domain:"choppies.co.bw",city:"Gaborone"},
+    {name:"Pick n Pay",country:"South Africa",domain:"pnp.co.za",city:"Cape Town"}
+  ],
+  au:[
+    {name:"Woolworths Group Australia",country:"Australia",domain:"woolworthsgroup.com.au",city:"Sydney"},
+    {name:"Coles Group Australia",country:"Australia",domain:"colesgroup.com.au",city:"Melbourne"},
+    {name:"Wesfarmers Australia",country:"Australia",domain:"wesfarmers.com.au",city:"Perth"},
+    {name:"Metcash Australia",country:"Australia",domain:"metcash.com",city:"Sydney"},
+    {name:"Harvey Norman Australia",country:"Australia",domain:"harveynorman.com.au",city:"Sydney"},
+    {name:"JB Hi-Fi Australia",country:"Australia",domain:"jbhifi.com.au",city:"Melbourne"},
+    {name:"The Warehouse NZ",country:"New Zealand",domain:"thewarehousegroup.co.nz",city:"Auckland"},
+    {name:"Foodstuffs NZ",country:"New Zealand",domain:"foodstuffs.co.nz",city:"Auckland"},
+    {name:"Big W Australia",country:"Australia",domain:"bigw.com.au",city:"Mascot NSW"},
+    {name:"Target Australia",country:"Australia",domain:"target.com.au",city:"Melbourne"}
+  ]
+};
+
 // OEM Brand prospects — real global brands by product + market
 const OEM_BRANDS = {
   "nasal-asp":{
@@ -1162,10 +1296,15 @@ function runChannelSearch(){
     document.getElementById('ch-detail').style.display='none';
     document.getElementById('ch-welcome').style.display='';
 
+    const medPtypes=getChecked('ch-pt');
+    const customPtypeVal=(document.getElementById('ch-custom-ptype').value||'').trim();
     cats.forEach(cat=>{
       regions.forEach(region=>{
-        const companies=RC[region]||RC.sea;
         ptypes.forEach(ptype=>{
+          // Use general company DB for custom ptypes; medical DB for preset ptypes
+          const isCustomPtype = !medPtypes.includes(ptype);
+          const db = isCustomPtype ? (GEN_RC[region]||GEN_RC.eu) : (RC[region]||RC.sea);
+          const companies = db;
           companies.forEach(co=>{
             const fn=rnd(FN[region]||FN.sea),ln=rnd(LN[region]||LN.sea);
             const title=rnd(TITLES[ptype]||TITLES.dist);
@@ -1179,7 +1318,9 @@ function runChannelSearch(){
               email:`${init}@${co.domain}`,
               phone:`${co.phone||'+1 000 000 '+nn()}`,
               address:`${co.city}, ${co.country}`,
-              desc:`${co.name} is a leading healthcare organisation in ${co.country} with established distribution and procurement channels. Actively sourcing ${CAT_LABEL[cat]||cat} products — CE-marked and locally registered products preferred.`,
+              desc: isCustomPtype
+                ? `${co.name} is a major ${TYPE_LABEL[ptype]||ptype} in ${co.country} with broad procurement and distribution networks. Potentially interested in sourcing ${CAT_LABEL[cat]||cat} products for their retail or distribution channels.`
+                : `${co.name} is a leading healthcare organisation in ${co.country} with established distribution and procurement channels. Actively sourcing ${CAT_LABEL[cat]||cat} products — CE-marked and locally registered products preferred.`,
               status:'new',notes:'',
               activity:[{date:new Date().toLocaleString(),text:`Added: ${CAT_LABEL[cat]||cat} · ${REGION_LABEL[region]||region}`}]
             });
