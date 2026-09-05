@@ -254,6 +254,10 @@ tr:hover td{background:#f8fbfc;cursor:pointer;}
         <label class="ms-item"><input type="checkbox" value="lab"><span>Laboratory / Diagnostics</span></label>
         <label class="ms-item"><input type="checkbox" value="gov"><span>Government Health Agency</span></label>
       </div>
+      <div style="margin-top:8px;">
+        <div style="font-size:10px;color:var(--sub);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;">自定義企業類型 Custom Company Type</div>
+        <input type="text" id="ch-custom-ptype" placeholder="如：Supermarket Chain、E-commerce Platform…" style="width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid var(--bdr);border-radius:6px;font-size:12px;background:var(--bg2);color:var(--txt);outline:none;">
+      </div>
     </div>
     <div class="fblock" style="border:none;">
       <button class="btn btn-teal btn-full" id="ch-btn" onclick="runChannelSearch()">
@@ -1142,10 +1146,13 @@ function runChannelSearch(){
   const cats=getChecked('ch-cat');
   const customCat=(document.getElementById('ch-custom-cat').value||'').trim();
   if(customCat) cats.push(customCat);
-  const regions=getChecked('ch-reg'),ptypes=getChecked('ch-pt');
+  const regions=getChecked('ch-reg');
+  const ptypes=getChecked('ch-pt');
+  const customPtype=(document.getElementById('ch-custom-ptype').value||'').trim();
+  if(customPtype) ptypes.push(customPtype);
   if(!cats.length){toast('Select at least one product or enter a custom product name.');return;}
   if(!regions.length){toast('Select at least one region.');return;}
-  if(!ptypes.length){toast('Select at least one prospect type.');return;}
+  if(!ptypes.length){toast('Select at least one prospect type or enter a custom company type.');return;}
 
   const btn=document.getElementById('ch-btn');
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Searching…';
